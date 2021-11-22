@@ -5,12 +5,12 @@ import altair as alt
 import pandas as pd
 import plotly.express as px
 import seaborn as sns
-sns.set_style('darkgrid')
+sns.set_style('whitegrid')
 import streamlit as st
 
 
 
-@st.cache
+@st.cache(allow_output_mutation=True)
 def load_data():
     """ function to clean the data and load into pandas dataframe """
     app_data = pd.read_csv('./data/ModifiedNaijaApps.csv')
@@ -38,9 +38,9 @@ def load_data():
 
 def popular_category(app_data):
     """ This function creates visualization for the most popular category"""
-    fig = plt.figure(figsize=(10, 7))
+    fig, ax = plt.subplots()
     #fig, ax = plt.subplots()
-    sns.countplot(app_data.category)
+    ax = sns.countplot(app_data.category)
     plt.xticks(rotation=90)
     plt.title('Naija app most popular category')
     
@@ -54,7 +54,7 @@ def top_cat(app_data):
     top_5 = Top_5['category'].tolist()
     top_pop = app_data.groupby('category')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
     # altair plot
-    fig = alt.Chart(top_pop).mark_bar().properties(width=500).encode(
+    fig = alt.Chart(top_pop).mark_bar().properties(width=500, height=500).encode(
     x = 'category',
     y = 'Total Installs'
     )
@@ -64,15 +64,16 @@ def mostInstalledCat(app_data):
     """ This function considers the overall category with the highest installation"""
     fig, ax = plt.subplots()
     plt.title('Total installation across all category')
-    ax = sns.barplot(y=app_data['category'], x= app_data['Total Installs'])
+    cat_data = app_data.groupby('category')['installs'].agg('sum').reset_index(name='Total Installs')
+    ax = sns.barplot(y=cat_data['category'], x= cat_data['Total Installs'])
     return fig
 
 def mostReviewedCat(app_data):
     """" This function is used to view the top five category with the most number of reviews"""
     cat_review = app_data.groupby('category', as_index=False)['reviews'].max().sort_values('reviews', ascending=False).head()
-    fig = plt.figure(figsize=(9, 10))
+    fig, ax = plt.subplots()
     plt.title('Top most reviewed category')
-    viz = sns.barplot(data=cat_review, x='reviews', y='category')
+    ax = sns.barplot(data=cat_review, x='reviews', y='category')
     return fig
 
 def mostRatedCat(app_data):
@@ -82,17 +83,17 @@ def mostRatedCat(app_data):
     fig, ax = plt.subplots()
     plt.xticks(rotation='horizontal')
     labels = cat_rating.keys()
-    plt.pie(x=cat_rating, autopct="%.1f%%", shadow=True, labels=labels, pctdistance=0.9)
-    plt.title('Most Rated Category')
+    plt.pie(x=cat_rating, autopct="%.1f%%", labels=labels, pctdistance=0.9)
+    #plt.title('Most Rated Category')
     return fig
 
 def appType(app_data):
     """This function returns the most downloaded app between paid apps and free apps"""
     app_type = app_data.groupby('free')['installs'].count()
-    pie, ax = plt.subplots(figsize=[15, 12])
+    fig, ax = plt.subplots()
     plt.xticks(rotation='horizontal')
     labels = ['Paid', 'Free']
-    fig = plt.pie(x=app_type, autopct="%.1f%%", labels=labels, pctdistance=0.9)
+    ax = plt.pie(x=app_type, autopct="%.1f%%", labels=labels, pctdistance=0.9)
     plt.title('Paid apps vs free apps with respect to installation')
     return fig
 
@@ -105,7 +106,7 @@ def wkly_download(app_data):
     viz = sns.barplot(data=day, x='installs', y='day_of_week')
     return fig
     
-def yearly_download(app_data):
+def yearly_download(app_data):     ##############################
     """This function is used to return the year with the most downloaded apps"""
     yearly_data = app_data.groupby('year')['installs'].agg('sum').reset_index(name='Total Installs')
     fig = plt.figure(figsize=(10, 6))
@@ -125,17 +126,17 @@ def appType_hist(app_data):
                         bins=bins, kde=False, hist_kws={"histtype": "bar", "alpha": .7})
     graph = sns.distplot(free_apps['ratings'], norm_hist= True, color= '#219ebc', label='Free Apps', bins=bins, kde=False,
                         hist_kws={'histtype':'bar', 'alpha': .7})
-    graph = sns.distplot(app_data['ratings'], norm_hist=True, color = '#023047', label= 'All apps', bins=bins, kde=False,
-                        hist_kws = {'histtype': 'step', 'alpha': 1, 'linewidth': 5})
+   # graph = sns.distplot(app_data['ratings'], norm_hist=True, color = '#023047', label= 'All apps', bins=bins, kde=False,
+     #                     hist_kws = {'histtype': 'step', 'alpha': 1, 'linewidth': 5})
 
     # show their mean review score
     graph.axvline(x=paid_apps['ratings'].mean(), color='#FF961F', linewidth=3, alpha=1)
     graph.axvline(x=free_apps['ratings'].mean(), color='#219ebc', linewidth=5, alpha=1)
-    graph.axvline(x=app_data['ratings'].mean(), color='#023047', linewidth=3, alpha=1)
+   # graph.axvline(x=app_data['ratings'].mean(), color='#023047', linewidth=3, alpha=1)
 
     # graphics info
     graph.text(x=0.5, y=0.5, s='Naija App Store', fontsize=20, weight='bold', alpha=.75, transform=ax.transAxes)
-    graph.text(x=0.5, y=0.45, s = 'app rating by count depending on the price', fontsize=16, alpha=.85, transform=ax.transAxes)
+    graph.text(x=0.5, y=0.45, s = 'app reviews by count based on the price', fontsize=16, alpha=.85, transform=ax.transAxes)
     graph.tick_params(axis='both', which ='major', labelsize=16)
     graph.axhline(y=0, color='black', linewidth=4, alpha=.7)
     #graph.set_xlim(left=1.9, right=5)
@@ -145,34 +146,30 @@ def appType_hist(app_data):
 
 def appType_byScore(app_data):
     """This function returns a histogram that compares the scores(stars) given between paid and free apps"""
-    free_apps = app_data[app_data['price']==0]
-    paid_apps =  app_data[app_data['price'] != 0]
+    app_data['app_type'] = ['free' if (x)==0 else 'paid' for x in app_data['price']]
 
-    fig, ax = plt.subplots()
-    bins = [1.9, 2.25, 2.75, 3.25, 3.75, 4.25, 4.75, 5]
-    graph = sns.distplot(paid_apps['score'], norm_hist=True, color='#FF961F', label='Paid Apps',
-                        bins=bins, kde=False, hist_kws={"histtype": "bar", "alpha": .7})
-    graph = sns.distplot(free_apps['score'], norm_hist= True, color= '#219ebc', label='Free Apps', bins=bins, kde=False,
-                        hist_kws={'histtype':'bar', 'alpha': .7})
-    graph = sns.distplot(app_data['score'], norm_hist=True, color = '#023047', label= 'All apps', bins=bins, kde=False,
-                        hist_kws = {'histtype': 'step', 'alpha': 1, 'linewidth': 5})
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    sns.histplot(
+        data=app_data,
+        x="score",
+        hue="app_type",
+        multiple="stack",
+        ax=ax1
+    )
+    sns.kdeplot(
+        data=app_data,
+        x="score",
+        hue="app_type",
+        multiple="stack",
+        ax=ax2
+    )
+    ax1.set_title("Histogram")
+    ax2.set_title("Kernel density")
 
-    # show their mean score
-    graph.axvline(x=paid_apps['score'].mean(), color='#FF961F', linewidth=3, alpha=1)
-    graph.axvline(x=free_apps['score'].mean(), color='#219ebc', linewidth=5, alpha=1)
-    graph.axvline(x=app_data['score'].mean(), color='#023047', linewidth=3, alpha=1)
-
-    # graphics info
-    graph.text(x=0.5, y=0.5, s='Naija App Store', fontsize=20, weight='bold', alpha=.75, transform=ax.transAxes)
-    graph.text(x=0.48, y=0.45, s = 'app rating by score depending on the price', fontsize=16, alpha=.85, transform=ax.transAxes)
-    graph.tick_params(axis='both', which ='major', labelsize=16)
-    graph.axhline(y=0, color='black', linewidth=4, alpha=.7)
-    #graph.set_xlim(left=1.9, right=5)
-    graph.xaxis.label.set_visible(False)
-    plt.legend(loc='center left', bbox_to_anchor=(0.02, 0.60))
     return fig
 
-def monthly_download(app_data):
+
+def monthly_download(app_data):       
     """This fucntion returns a line chart showing download trend by month as time move on"""
     monthly_data = app_data.groupby('month').mean()
     monthly_data.reset_index(inplace=True)
@@ -182,15 +179,18 @@ def monthly_download(app_data):
 
 def popularSize(app_data):
     """This function returns a bar chart that displays the top five most popular app size"""
-    fig = app_data['size'].value_counts().sort_values(ascending=False).head(5).plot(kind='barh', color=list('rgbkymc'),
-                                              alpha=0.7, figsize=(8,6))
+    fig, ax = plt.subplots()
+    sizez = app_data.groupby('size').size().reset_index(name='Count').nlargest(5, 'Count')
+    ax = sns.barplot(y=sizez['size'], x=sizez['Count'], color='seagreen')
+
     return fig
 
 def appSize_bar(app_data):
     """ This function returns a bar plot that displays the top ten most downloaded app size based on their sizes"""
+    fig, ax = plt.subplots()
     App_size = app_data.groupby('size').installs.sum().sort_values(ascending=False).head(10)
     plt.title('Top 10 most downloaded app size')
-    fig = sns.barplot(App_size.values, App_size.index)
+    ax = sns.barplot(App_size.values, App_size.index, color='red')
     return fig
 
 def appSize_hist(app_data):
@@ -238,7 +238,7 @@ def appSize_hist(app_data):
     plt.legend(loc='center left', bbox_to_anchor=(0.02, 0.60))
     return fig
 
-def content_rate(app_data):
+def content_rate(app_data):      
     """This function checks for the correlation between content rating and installation in a tabular chart and then
     displays it on a bar chart"""
 
@@ -248,30 +248,20 @@ def content_rate(app_data):
     app_no = app_data.groupby('contentRating')['installs'].size().reset_index(name='Number of Apps')
     #write(content_instal)
     # write(app_no)
-    fig = px.bar(x=content_instal.contentRating, y=content_instal.Number_Installations, height=100)
+    fig = px.pie(content_instal, values='Number_Installations',
+                names='contentRating',
+                color_discrete_sequence=['red', 'goldenrod', 'cyan', 'green', 'blue','magenta'])
     return fig
 
 def content_review(app_data):
     """This function displays on a chart which content rating attracted the most reviews"""
+    content_review = app_data.groupby('contentRating')['reviews'].agg('sum').reset_index(name='Total Reviews')
+    fig = px.pie(content_review, values='Total Reviews',
+                     names='contentRating',
+                     color_discrete_sequence=px.colors.sequential.RdBu)
+    return fig
 
 
-    base = alt.Chart(app_data,
-                    title = 'Content Rating Dependencies'
-                    ).properties(width=500)
-
-    plot1 = base.mark_line(point=True).encode(
-        alt.X('reviews', title = 'Number of rating of apps (reviews)'),
-        alt.Y('installs', title = 'Total installation (installs)'),
-        #alt.Size('score', title = 'star rating of apps (score)'),
-        alt.Color('contentRating', title = 'Target audience (contentRating)'),
-        
-        tooltip = [alt.Tooltip('reviews'),
-                alt.Tooltip('installs'),
-                # alt.Tooltip('score')
-                ]
-    )
-    (plot1).interactive()
-    return base
 
 def content_score(app_data):
     """This function returns a histogram plot that displays the average star rating for all app content rating"""
@@ -323,31 +313,33 @@ def appName(app_data):
     fig1, axes = plt.subplots(figsize=(15,3), ncols=2, nrows=1)
     axes[0].set_title('Number of Installation', y= 1.1)
     axes[1].set_title('Number of Apps', y= 1.1)
-    # viz1 = sns.barplot(x=app_install.appName_len, y= app_install.Number_of_installation, ax=axes[0])
+    #viz1 = sns.barplot(x=app_install.appName_len, y= app_install.Number_of_installation, ax=axes[0])
     #viz2 = sns.barplot(data_apps.appName_len, y = data_apps.Number_of_Apps, ax=axes[1])
-    # return fig1
+    #return fig1
     fig2, ax = plt.subplots()
     plt.title('Installation/Total Apps', y = 1.0)
     plt.tight_layout()
     ax = sns.barplot(data_apps.appName_len, y = app_install.Number_of_installation/data_apps.Number_of_Apps,
-                    palette=sns.color_palette(palette='Set1', n_colors=2, desat=.8))
+                    palette=sns.color_palette(palette='Set2', n_colors=2, desat=.8))
     return fig2
     
 
-def Mostdownloaded_app(app_data):
+def Mostdownloaded_app(app_data):       
     """This function returns a bar chart with the most downloaded app"""
     # top ten most downloaded naija apps on playstore
+    fig, ax = plt.subplots()
+    app_data['appName_len'] = ['>2 words' if len(x.split())>2 else '<=2words' for x in app_data['appName']]
     App = app_data.groupby('appName').installs.sum().sort_values(ascending=False).head(10)
     plt.title('Top 10 most downloaded Naija apps')
-    fig = sns.barplot(App.values, App.index)
+    ax = sns.barplot(App.values, App.index)
     return fig
 
-def MostReviewed_app(app_data):
+def MostReviewed_app(app_data):   
     """This function returns a bar chart displaying the app with the most review"""
-    fig = plt.figure(figsize=(10,5))
+    fig, ax =plt.subplots()
     appRating = app_data.groupby('appName').ratings.sum().sort_values(ascending=False).head(10)
     plt.title('Top 10 most reviwed Naija apps')
-    sns.barplot(appRating.values, appRating.index)
+    ax = sns.barplot(appRating.values, appRating.index)
     return fig
 
 def popularRelease_date(app_data):
@@ -362,4 +354,78 @@ def popularRelease_date(app_data):
     x = 'month',
     y = 'Total Installs'
     )
+    return fig
+
+
+def mdhist_content(app_data):
+    """This function is used to preview the distribution of app content rating
+    based on their star rating"""
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    sns.histplot(
+        data=app_data,
+        x="score",
+        hue="contentRating",
+        multiple="stack",
+        ax=ax1
+    )
+    sns.kdeplot(
+        data=app_data,
+        x="score",
+        hue="contentRating",
+        multiple="stack",
+        ax=ax2
+    )
+    ax1.set_title("Histogram")
+    ax2.set_title("Kernel density")
+
+    return fig
+
+
+def get_category(app_data):
+    """This function is to get each category by their"""
+     
+    Category = app_data.category.unique().tolist()
+    return [name for name in Category if name != None] 
+
+
+def size_map(x):
+    """function to create mapping for the top ten most downloaded app sizes to create a histogram
+    chart to investigate how these various app sizes are rated by star from users based on their performance"""
+    
+    if x == '38M':
+        return 'size_38MB'
+    elif x == '7.3M':
+        return 'size_7.3MB'
+    elif x == '13M':
+        return 'size_13MB'
+    elif x == '16M':
+        return 'size_16MB'
+    elif x == 'Varies with device':
+        return 'device_size'
+
+def appSizes_hist(app_data):
+    """This function returns a histogram chart that compares the average star rating of the top five
+    most downloaded app size """
+
+    app_data['app_sizes'] = app_data['size'].apply(size_map)
+    #map_size_df = app_data.groupby('app_sizes')['score'].agg('sum').reset_index(name='Star Rating')
+    
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    sns.histplot(
+        data=app_data,
+        x="score",
+        hue="app_sizes",
+        multiple="stack",
+        ax=ax1
+    )
+    sns.kdeplot(
+        data=app_data,
+        x="score",
+        hue="app_sizes",
+        multiple="stack",
+        ax=ax2
+    )
+    ax1.set_title("Star Rating")
+    ax2.set_title("Kernel density")
+
     return fig

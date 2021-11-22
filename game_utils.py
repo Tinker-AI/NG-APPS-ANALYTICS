@@ -38,18 +38,17 @@ def load_games():
 def game_cost(app_data):
     """Display the ratio of paid games to free ones"""
     gameCost = app_data['free'].value_counts()
-    fig = plt.figure(figsize = (10,5))
+    fig, ax = plt.subplots()
     categories = ["Free","Paid"]
     colors = ["lightblue", "lightgreen"]
     explode = (0, 0.1)
-    plt.pie(x=gameCost, labels=categories, colors=colors, 
+    ax = plt.pie(x=gameCost, labels=categories, colors=colors, 
         explode=explode, autopct='%1.1f%%', shadow=False, startangle=120)
-    plt.title('Cost of Games on Playstore')
     # plt.gcf().set_size_inches(7,7)
-    return plt # each time I use "return fig", I get an AttributeError
+    return fig # each time I use "return fig", I get an AttributeError
 
 def genre(app_data):
-    # plt.figure(figsize=(11,7))
+    fig = plt.figure(figsize=(11,7))
     plt.xticks(rotation=90)
     splot = sns.countplot(x=app_data.category, palette='rainbow')
     for p in splot.patches:
@@ -59,7 +58,7 @@ def genre(app_data):
     plt.ylabel('Total sum')
     st.title('Game Types on Playstore')
     plt.tight_layout()
-    return plt
+    return fig
 
 def count_installs(app_data): # previous plot keeps appearing on top of this
     fig, ax = plt.subplots()
