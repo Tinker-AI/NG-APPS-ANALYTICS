@@ -411,12 +411,32 @@ elif Options == "Sentiment Analytics":
     img = Image.open("./asset/sentiment.jpg")
     st.image(img)
     st.markdown('### Want to analyze users feedback in realtime? Select your choice')
-    se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps(Android)', 'AppStore Apps (ios)'))
-    if se =="GooglePlay Apps(Android)":
-        pass
+    se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
+    
+    if se =="GooglePlay Apps (Android)":
+        try:
+            id = st.text_input("What's the App's ID on Playstore?")
+            df = fetchPlaystorereviews(id)
+            # st.write(df)
+            df["Sentiment"] = df["review"].apply(sentiment_scores)
+            st.write(df)
+            st.pyplot(sentiment_chart(df))
+            st.pyplot(sentiments_and_word_cloud(df))
 
-    elif se =="AppStore Apps (ios)":
-        pass
+        except:
+            pass
+
+    elif se =="AppStore Apps (iOS)":
+        try:
+            app_name = st.text_input("What's the App's Name on Appstore?")
+            df = fetchAppstorereviews(app_name)
+            st.write(df)
+            df["Sentiment"] = df["review"].apply(sentiment_scores)
+            st.pyplot(sentiment_chart(df))
+            st.pyplot(sentiments_and_word_cloud(df))
+
+        except:
+            pass
     
 
 
