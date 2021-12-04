@@ -148,8 +148,34 @@ def sentiments_and_word_cloud(df):
     return fig
     
 #AISHA
+def preprocessing(text):
+  """This function returns a clean text for a review"""
+  text = text.lower()   #convert reviews text to lower case
+  words_list = word_tokenize(text)   #change review text to tokens/words
+
+  #removing stopwords
+  stop_words = stopwords.words('english')
+  filtered_words = [word for word in words_list if word not in stop_words]
+
+  #removing stand alone punctuations, special characters and numerical tokens as they do not contribute to sentiment which leaves only alphabetic characters.
+  clean_words = [word for word in filtered_words if word.isalpha()]
+
+  #stemming words to their root form
+  # porter = PorterStemmer()
+  # stemmed = [porter.stem(word) for word in clean_words]
+
+
+  # join the entire word back to string
+  return(" ".join(clean_words))
+
+def clean_data(df):
+  """This function takes a dataframe of reviews and returns a preprocessed/clean dataframe of reviews"""
+  df["clean review"] = df["review"].apply(preprocessing)
+  return df
+
+
 def sentiment_scores(sentence):
-    """This function calculates the sentiment scores for each review"""
+    """This function calculates the sentiment scores of a given sentence"""
  
     # Create a SentimentIntensityAnalyzer object.
     sid_obj = SentimentIntensityAnalyzer()
@@ -170,16 +196,16 @@ def sentiment_scores(sentence):
 
 
 def sentiment_type(df):
-    """This function returns takes a dataframe with reviews of an app, calculates and returns the appropriate sentiment type of each review"""
+    """This function takes a dataframe with reviews of an app, calculates and returns the appropriate sentiment type of each review"""
     
-    df["Sentiment"] = df["review"].apply(sentiment_scores)
+    df["Sentiment"] = df["clean review"].apply(sentiment_scores)
     return df
 
 
 def sentiment_chart(df):
-  """This function plots a pie chart of the sentiments gotten from an app's reviews"""
+  """This function takes a dataframe containing app sentiments and plots a pie chart"""
 
-  data = df.groupby("Sentiment")["review"].count()
+  data = df.groupby("Sentiment")["clean review"].count()
   data = data.sort_values(ascending = False)
   pie, ax = plt.subplots(figsize=[10, 10])
   plt.xticks(rotation='horizontal')
@@ -194,17 +220,20 @@ def sentiment_chart(df):
 #just trying out a single function here where an app ID is passed and it fetches the reviews, calculates the sentiment scores and plot the sentiment types
 #combines the above functions but takes too long to run. Might not be beeded, depends on what you think. Also codes above may need correction.
 
-# def sentiment_chart(id):
-#   """This function plots a pie chart of the sentiments gotten from an app's reviews"""
+# def sentiment_chart_whole(id):
+#   """This function takes an app id and plots a pie chart of the sentiments gotten from an app's reviews"""
   
 #   # get the reviews for the app using the defined function
-#   reviews = fetch_review(id)  
+#   reviews_df = fetch_review(id)  
   
-#   #get the sentiments from the reviews i.e positive, neutral and negative
-#   reviews["Sentiment"] = reviews["review"].apply(sentiment_scores)  
+#   # clean the reviews
+#   reviews_df["clean review"] = reviews_df["review"].apply(clean_data)
+
+#   #get the sentiments from the cleaned reviews i.e positive, neutral and negative
+#   reviews_df["Sentiment"] = reviews_df["clean review"].apply(sentiment_type)  
 
 #   #using the dataframe to plot a pie chart of the sentiments
-#   data = reviews.groupby("Sentiment")["review"].count()
+#   data = reviews_df.groupby("Sentiment")["clean review"].count()
 #   data = data.sort_values(ascending = False)
 #   pie, ax = plt.subplots(figsize=[10, 10])
 #   plt.xticks(rotation='horizontal')
