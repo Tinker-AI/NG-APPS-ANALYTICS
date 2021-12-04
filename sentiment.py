@@ -146,6 +146,74 @@ def sentiments_and_word_cloud(df):
     ax = plt.imshow(wc, interpolation='bilinear')
     plt.axis("off")
     return fig
+    
+#AISHA
+def sentiment_scores(sentence):
+    """This function calculates the sentiment scores for each review"""
+ 
+    # Create a SentimentIntensityAnalyzer object.
+    sid_obj = SentimentIntensityAnalyzer()
+ 
+    # polarity_scores method of SentimentIntensityAnalyzer
+    # object gives a sentiment dictionary.
+    # which contains pos, neg, neu, and compound scores.
+    sentiment_dict = sid_obj.polarity_scores(sentence)
+ 
+    # decide sentiment as positive, negative and neutral
+    if sentiment_dict['compound'] >= 0.05 :
+        result="positive"
+    elif sentiment_dict['compound'] <= -0.05 :
+        result="negative"
+    else :
+        result="neutral"
+    return result
+
+
+def sentiment_type(df):
+    """This function returns takes a dataframe with reviews of an app, calculates and returns the appropriate sentiment type of each review"""
+    
+    df["Sentiment"] = df["review"].apply(sentiment_scores)
+    return df
+
+
+def sentiment_chart(df):
+  """This function plots a pie chart of the sentiments gotten from an app's reviews"""
+
+  data = df.groupby("Sentiment")["review"].count()
+  data = data.sort_values(ascending = False)
+  pie, ax = plt.subplots(figsize=[10, 10])
+  plt.xticks(rotation='horizontal')
+  explode = (0, 0.1, 0.1)
+  labels = data.keys()
+  fig = plt.pie(x=data, autopct="%.1f%%", shadow=True, labels=labels, explode=explode, pctdistance=0.5)
+  plt.title('App Sentiments')
+  return fig
+
+
+
+#just trying out a single function here where an app ID is passed and it fetches the reviews, calculates the sentiment scores and plot the sentiment types
+#combines the above functions but takes too long to run. Might not be beeded, depends on what you think. Also codes above may need correction.
+
+# def sentiment_chart(id):
+#   """This function plots a pie chart of the sentiments gotten from an app's reviews"""
+  
+#   # get the reviews for the app using the defined function
+#   reviews = fetch_review(id)  
+  
+#   #get the sentiments from the reviews i.e positive, neutral and negative
+#   reviews["Sentiment"] = reviews["review"].apply(sentiment_scores)  
+
+#   #using the dataframe to plot a pie chart of the sentiments
+#   data = reviews.groupby("Sentiment")["review"].count()
+#   data = data.sort_values(ascending = False)
+#   pie, ax = plt.subplots(figsize=[10, 10])
+#   plt.xticks(rotation='horizontal')
+#   explode = (0, 0.1, 0.1)
+#   labels = data.keys()
+#   fig = plt.pie(x=data, autopct="%.1f%%", shadow=True, labels=labels, explode=explode, pctdistance=0.5)
+#   plt.title('App Sentiments')
+#   return fig
+
 
 
 # if __name__ =='__main__':  
