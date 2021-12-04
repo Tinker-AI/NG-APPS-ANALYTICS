@@ -11,7 +11,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
 st.sidebar.markdown("""<style>body {background-color: #2C3454;white;}</style><body></body>""", unsafe_allow_html=True)
-st.markdown("""<h1 style='text-align: center; white;font-size:60px;margin-top:-50x;'>APP ANALYTICS</h1><h1 style='text-align: center; color: white;font-size:30px;margin-top:-30px;'>Research Project on Nigerian Products<br></h1>""", unsafe_allow_html=True)
+st.markdown("""<h1 style='text-align: center; white;font-size:60px;margin-top:-50x;'>APP ANALYTICS</h1><h1 style='text-align: center; color: black;font-size:30px;margin-top:-30px;'>Research Project on Nigerian Products<br></h1>""", unsafe_allow_html=True)
 
 def home_page():
     st.markdown("""<h2 style='text-align: left; color: white;'>Problem Statement</h2><p style='color: white;'>""")
@@ -323,100 +323,122 @@ if Options == "Game Analytics":
         st.write(top_pop)
 
     else:
-        game_data = games_df[games_df['category']== category_name]
-        st.write('')   # create white spaces
-        st.markdown('## Analyze {} Apps'.format(category_name))
-        st.write('')
-        st.pyplot(appSize_bar(game_data))
-        st.write('')
+        try:
+            game_data = games_df[games_df['category']== category_name]
+            st.write('')   # create white spaces
+            st.markdown('## Analyze {} Apps'.format(category_name))
+            st.write('')
+            st.pyplot(appSize_bar(game_data))
+            st.write('')
 
-        st.markdown('###### This plot shows the common game sizes in {}'.format(category_name))
-        st.pyplot(popularSize(game_data))
-        st.write('')
+            st.markdown('###### This plot shows the common game sizes in {}'.format(category_name))
+            st.pyplot(popularSize(game_data))
+            st.write('')
 
-        st.markdown("###### Most downloaded game apps in {}".format(category_name))
-        top_pop = game_data.groupby('appName')['installs'].agg(sum).head(10).reset_index(name='Total Installs')
-        fig = alt.Chart(top_pop).mark_bar(color='magenta').properties(width=500, height=500).encode(
-        x = 'appName',
-        y = 'Total Installs'
-        )
-        st.altair_chart(fig)
-        st.write('')
-
-        st.markdown("###### Top ten game apps with the most review in {} category".format(category_name))
-        cat_review = game_data.groupby('appName', as_index=False)['reviews'].max().sort_values('reviews', ascending=False).head(10)
-        fig = px.bar(cat_review, y='reviews', x='appName', color_discrete_sequence=['green']
-        )
-        st.plotly_chart(fig)
-        st.write('')
-
-        st.write("###### Top ten most rated game Apps in {} category".format(category_name))
-        cat_rating = game_data.groupby('appName', as_index=False)['ratings'].max().sort_values('ratings', ascending=False).head(10)
-        fig = alt.Chart(cat_rating).mark_bar(color='orange').properties(width=500, height=500).encode(
+            st.markdown("###### Most downloaded game apps in {}".format(category_name))
+            top_pop = game_data.groupby('appName')['installs'].agg(sum).head(10).reset_index(name='Total Installs')
+            fig = alt.Chart(top_pop).mark_bar(color='magenta').properties(width=500, height=500).encode(
             x = 'appName',
-            y = 'ratings'
-        )
-        st.altair_chart(fig)
+            y = 'Total Installs'
+            )
+            st.altair_chart(fig)
+            st.write('')
 
-        st.write("###### Day of the week that most games were downloaded from {}".format(category_name))
-        st.pyplot(wkly_download(game_data))
-        st.write('')
+            st.markdown("###### Top ten game apps with the most review in {} category".format(category_name))
+            cat_review = game_data.groupby('appName', as_index=False)['reviews'].max().sort_values('reviews', ascending=False).head(10)
+            fig = px.bar(cat_review, y='reviews', x='appName', color_discrete_sequence=['green']
+            )
+            st.plotly_chart(fig)
+            st.write('')
 
-        st.markdown("###### Star rating distribution of game content rating for {}".format(category_name))
-        st.pyplot(mdhist_content(game_data)) 
-        st.write('') 
+            st.write("###### Top ten most rated game Apps in {} category".format(category_name))
+            cat_rating = game_data.groupby('appName', as_index=False)['ratings'].max().sort_values('ratings', ascending=False).head(10)
+            fig = alt.Chart(cat_rating).mark_bar(color='orange').properties(width=500, height=500).encode(
+                x = 'appName',
+                y = 'ratings'
+            )
+            st.altair_chart(fig)
 
-        st.markdown("###### Star ratings of top ten different game app sizes in {} category".format(category_name))
-        size_var = game_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=True).head(10)
-        fig = px.histogram(size_var, x='score', nbins=10, color='size')
-        st.plotly_chart(fig)
-        st.write('')
+            st.write("###### Day of the week that most games were downloaded from {}".format(category_name))
+            st.pyplot(wkly_download(game_data))
+            st.write('')
 
-        st.markdown("###### Star ratings of the least ten different game app sizes in {} category".format(category_name))
-        size_var = game_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=False).head(10)
-        fig = px.histogram(size_var, x='score', nbins=10, color='size')
-        st.plotly_chart(fig)
-        st.write('')
+            st.markdown("###### Star rating distribution of game content rating for {}".format(category_name))
+            st.pyplot(mdhist_content(game_data)) 
+            st.write('') 
 
-        st.markdown("###### Monthly download trend for {} game apps".format(category_name))
-        st.plotly_chart(monthly_download(game_data))
-        st.write('')
+            st.markdown("###### Star ratings of top ten different game app sizes in {} category".format(category_name))
+            size_var = game_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=True).head(10)
+            fig = px.histogram(size_var, x='score', nbins=10, color='size')
+            st.plotly_chart(fig)
+            st.write('')
 
-        st.markdown("###### Content Rating type with the most review for {} game apps".format(category_name))
-        content_review = game_data.groupby('contentRating')['reviews'].agg('sum').reset_index(name='Total Reviews')
-        fig = px.pie(content_review, values='Total Reviews',
-                        names='contentRating',
-                        color_discrete_sequence=px.colors.sequential.RdBu)
-        st.plotly_chart(fig)
-        st.write('')
+            st.markdown("###### Star ratings of the least ten different game app sizes in {} category".format(category_name))
+            size_var = game_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=False).head(10)
+            fig = px.histogram(size_var, x='score', nbins=10, color='size')
+            st.plotly_chart(fig)
+            st.write('')
 
-        st.markdown("###### Popular release date for {} game apps".format(category_name))
-        st.altair_chart(popularRelease_date(game_data))
-        st.write('')
+            st.markdown("###### Monthly download trend for {} game apps".format(category_name))
+            st.plotly_chart(monthly_download(game_data))
+            st.write('')
 
-        st.write("###### Effect of game name length on average installation for {} game apps".format(category_name))
-        st.pyplot(appName(game_data))
-        st.write('')
+            st.markdown("###### Content Rating type with the most review for {} game apps".format(category_name))
+            content_review = game_data.groupby('contentRating')['reviews'].agg('sum').reset_index(name='Total Reviews')
+            fig = px.pie(content_review, values='Total Reviews',
+                            names='contentRating',
+                            color_discrete_sequence=px.colors.sequential.RdBu)
+            st.plotly_chart(fig)
+            st.write('')
 
-        st.markdown("###### Content Rating type with the highest installation for {} game apps".format(category_name))
-        st.plotly_chart(content_rate(game_data))
-        st.write('')
+            st.markdown("###### Popular release date for {} game apps".format(category_name))
+            st.altair_chart(popularRelease_date(game_data))
+            st.write('')
 
-        st.markdown('###### Statistics distribution between paid and free {} game apps based on their star rating'.format(category_name))
-        st.pyplot(appType_byScore(game_data))
-        st.write('')
+            st.write("###### Effect of game name length on average installation for {} game apps".format(category_name))
+            st.pyplot(appName(game_data))
+            st.write('')
+
+            st.markdown("###### Content Rating type with the highest installation for {} game apps".format(category_name))
+            st.plotly_chart(content_rate(game_data))
+            st.write('')
+
+            st.markdown('###### Statistics distribution between paid and free {} game apps based on their star rating'.format(category_name))
+            st.pyplot(appType_byScore(game_data))
+            st.write('')
+        except ValueError:
+            st.write("### ... Sorry this feature does not have enough data to display this chart")
 
 
 elif Options == "Sentiment Analytics":
     img = Image.open("./asset/sentiment.jpg")
     st.image(img)
-    st.markdown('### Want to analyze users feedback in realtime? Select your choice')
+    st.markdown('### Want to analyze users feedback in real-time? Select your choice')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps(Android)', 'AppStore Apps (ios)'))
     if se =="GooglePlay Apps(Android)":
-        pass
+        user_input = st.text_input("Enter an app ID from PlayStore (eg. com.invest.bamboo)")
+        if user_input !="":
+            with st.spinner('Calling API to fetch result for {}....'.format(user_input)):
+                try:
+                    content = fetch_review(user_input)
+                except:
+                    st.write("Try Again!...")
+            
+            if st.checkbox('View fetched result', False):
+                st.write(content)
+            st.success('Done!')
 
     elif se =="AppStore Apps (ios)":
-        pass
+        user_input = st.text_input("Enter an app name from AppStore (eg. tiktok")
+        if user_input !="":
+            with st.spinner("Calling API to get result for {}".format(user_input)):
+                try:
+                    Review = AppleUsers_review(user_input)
+                except:
+                    st.write("Try Again!")
+            if st.checkbox('View fetched result', False):
+                st.write(Review)
+            st.success('Done!')
     
 
 
@@ -438,15 +460,6 @@ elif Options == "Sentiment Analytics":
 
 
 
-    # Azeez starts here
-    ###############
-    ##############
-    #############
-    # --------- general plot on category------------
-
-    # else:
-    #####333#########
-     # app level insight 
 
         
         
