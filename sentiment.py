@@ -1,5 +1,5 @@
 from pandas.tseries.offsets import SemiMonthBegin
-from google_play_scraper import reviews_all
+from google_play_scraper import reviews_all, Sort, reviews
 from app_store_scraper import AppStore
 import re
 import string
@@ -29,8 +29,24 @@ def fetchPlaystorereviews(id):
     Returns:
     All reviews of the app in form of a dataframe.
     """
+    results, token = reviews(
+      id,           # found in app's url
+      lang='en',        # defaults to 'en'
+      country='ng',     # defaults to 'us'
+      sort=Sort.NEWEST, # start with most recent
+      count=200       # batch size
+    )
+
     allResults = []
-    results = reviews_all(id)
+
+    # results = reviews_all(
+    # id,
+    # #sleep_milliseconds=0, # defaults to 0
+    # lang='en', # defaults to 'en'
+    # country='ng' # defaults to 'us'
+    # #sort=Sort.MOST_RELEVANT, # defaults to Sort.MOST_RELEVANT
+    #  # defaults to None(means all score)
+    # )
 
     for i in range(len(results)):
         result = results[i]["content"]
@@ -62,92 +78,42 @@ def fetchAppstorereviews(app_name):
     return df
 
 
-# def process_review(text):
-#     """This function returns a clean text for all the reviews"""
-#     # remove non-letters
-#     letters = re.sub("[^a-zA-Z", " ", text)
-#     # remove punctation
-#     filtered_text = "".join([char for char in letters if char not in string.punctuation])
-#     # convert text to lowercase
-#     text_lower = filtered_text.lower()
-#     # filter out stopwords
-#     words_stop = set(stopwords.words("english"))
-#     # remove stopwords
-#     meaningful_words = [w for w in text_lower if not w in words_stop]
-#     # join the entire word back to string
-#     return(" ".join(meaningful_words))
-
-
-def sentiment_scores(sentence):
+def remove_newline(review):
+    return re.sub('\n', ' ', str(review.lower()))
+def remove_symbols(review):
+    re.sub(r'^\x00-\x7F+', ' ', review)
+    return re.sub(r'[@!.,(\/&)?:#*...-;'']', '', str(review)) 
+def remove_urls(review):
+    return re.sub(r'http\S+', '', str(review))
  
-    # Create a SentimentIntensityAnalyzer object.
-    sid_obj = SentimentIntensityAnalyzer()
+
+def preprocessReview(review):
+    review = remove_urls(review)
+    review = remove_symbols(review)
+    review = remove_newline(review)
+
+    return review
+
+
+# def sentiment_scores(sentence):
  
-    # polarity_scores method of SentimentIntensityAnalyzer
-    # object gives a sentiment dictionary.
-    # which contains pos, neg, neu, and compound scores.
-    sentiment_dict = sid_obj.polarity_scores(sentence)
+    # # Create a SentimentIntensityAnalyzer object.
+    # sid_obj = SentimentIntensityAnalyzer()
  
-    # decide sentiment as positive, negative and neutral
-    if sentiment_dict['compound'] >= 0.05 :
-        result="positive"
-    elif sentiment_dict['compound'] <= -0.05 :
-        result="negative"
-    else:
-        result="neutral"
-    return result
+    # # polarity_scores method of SentimentIntensityAnalyzer
+    # # object gives a sentiment dictionary.
+    # # which contains pos, neg, neu, and compound scores.
+    # sentiment_dict = sid_obj.polarity_scores(sentence)
+ 
+    # # decide sentiment as positive, negative and neutral
+    # if sentiment_dict['compound'] >= 0.05 :
+    #     result="positive"
+    # elif sentiment_dict['compound'] <= -0.05 :
+    #     result="negative"
+    # else:
+    #     result="neutral"
+    # return result
 
-
-def sentiment_chart(df):
-    """Visualizes the sentiments from an app's reviews in form of a pie chart""" 
-    
-    # get the sentiments from the reviews i.e positive, neutral and negative
-    # df["Sentiment"] = df["review"].apply(sentiment_scores)  
-
-    # using the dataframe to plot a pie chart of the sentiments
-    colors = ['lightcoral', 'lightskyblue', 'green']
-    pie, ax = plt.subplots()
-    plt.xticks(rotation='horizontal')
-    explode = (0.1, 0, 0)
-    labels = 'negative', 'neutral', 'positive'
-    plt.pie(x=df.groupby("Sentiment").count()['review'], autopct="%1.1f%%", \
-                    shadow=True, labels=labels, \
-                    colors=colors, explode=explode, startangle=120)
-    plt.title('App Reviews Sentiments', size=15)
-    plt.show()
-
-
-def sentiments_and_word_cloud(df):
-
-    pos_sent_mask = "./asset/thumb_up.png"
-    neg_sent_mask = "./asset/thumb_down.png"
-    neu_sent_mask = "./asset/thumb_side.png"
-
-    
-    sentiment = df["Sentiment"].value_counts().index[0]
-
-    if sentiment=="negative":
-        img = np.array(Image.open(neg_sent_mask))
-
-    elif sentiment=="neutral":
-        img = np.array(Image.open(neu_sent_mask))
-
-    else:
-        img = np.array(Image.open(pos_sent_mask))
-    
-    img = img+1*255
-
-    wc = WordCloud(background_color=None, max_font_size=100, max_words=10000, mask=img,
-                    mode="RGBA", width=1600, height=800, stopwords=stopwords, colormap=matplotlib.cm.Accent)
-
-    
-    wc.generate(' '.join(df["review"]))
-    fig, ax = plt.subplots()
-    ax = plt.imshow(wc, interpolation='bilinear')
-    plt.axis("off")
-    return fig
-    
-#AISHA
 def sentiment_scores(sentence):
     """This function calculates the sentiment scores for each review"""
  
@@ -160,66 +126,65 @@ def sentiment_scores(sentence):
     sentiment_dict = sid_obj.polarity_scores(sentence)
  
     # decide sentiment as positive, negative and neutral
-    if sentiment_dict['compound'] >= 0.05 :
-        result="positive"
-    elif sentiment_dict['compound'] <= -0.05 :
-        result="negative"
-    else :
+    if sentiment_dict['neu'] > 0.80 and sentiment_dict['neu'] > sentiment_dict['pos'] and sentiment_dict['neu'] > sentiment_dict['neg']:
         result="neutral"
+
+    elif sentiment_dict['pos'] > sentiment_dict['neg']:
+        result="positive"
+    else:
+        result="negative"
     return result
 
 
-def sentiment_type(df):
-    """This function returns takes a dataframe with reviews of an app, calculates and returns the appropriate sentiment type of each review"""
-    
-    df["Sentiment"] = df["review"].apply(sentiment_scores)
-    return df
-
-
 def sentiment_chart(df):
-  """This function plots a pie chart of the sentiments gotten from an app's reviews"""
+    """Visualizes the sentiments from an app's reviews in form of a pie chart"""  
 
-  data = df.groupby("Sentiment")["review"].count()
-  data = data.sort_values(ascending = False)
-  pie, ax = plt.subplots(figsize=[10, 10])
-  plt.xticks(rotation='horizontal')
-  explode = (0, 0.1, 0.1)
-  labels = data.keys()
-  fig = plt.pie(x=data, autopct="%.1f%%", shadow=True, labels=labels, explode=explode, pctdistance=0.5)
-  plt.title('App Sentiments')
-  return fig
+    # using the dataframe to plot a pie chart of the sentiments
+    colors = ['lightcoral', 'lightskyblue', 'green']
+    pie, ax = plt.subplots()
+    plt.xticks(rotation='horizontal')
+    x = df.groupby("Sentiment").count()['cleanReview']
+    
+    labels = list(df["Sentiment"].unique())
+    labels = labels[::-1]
+    colors = ['lightcoral', 'lightskyblue', 'green']
 
+    plt.pie(x=x, autopct="%1.1f%%", \
+                    shadow=True, labels=labels, \
+                    colors=colors, explode=None, startangle=120)
+    plt.title('App Reviews Sentiments', size=15)
+    plt.show()
+ 
 
+def sentiments_and_word_cloud(df):
 
-#just trying out a single function here where an app ID is passed and it fetches the reviews, calculates the sentiment scores and plot the sentiment types
-#combines the above functions but takes too long to run. Might not be beeded, depends on what you think. Also codes above may need correction.
+    pos_sent_mask = "./asset/thumb_up.png"
+    neg_sent_mask = "./asset/thumb_down.png"
+    neu_sent_mask = "./asset/thumb_side.png"
 
-# def sentiment_chart(id):
-#   """This function plots a pie chart of the sentiments gotten from an app's reviews"""
-  
-#   # get the reviews for the app using the defined function
-#   reviews = fetch_review(id)  
-  
-#   #get the sentiments from the reviews i.e positive, neutral and negative
-#   reviews["Sentiment"] = reviews["review"].apply(sentiment_scores)  
+    
+    # sentiment = df["Sentiment"].value_counts().index[0]
+    sentiment = df.groupby("Sentiment").count()['cleanReview'].index[-1]
 
-#   #using the dataframe to plot a pie chart of the sentiments
-#   data = reviews.groupby("Sentiment")["review"].count()
-#   data = data.sort_values(ascending = False)
-#   pie, ax = plt.subplots(figsize=[10, 10])
-#   plt.xticks(rotation='horizontal')
-#   explode = (0, 0.1, 0.1)
-#   labels = data.keys()
-#   fig = plt.pie(x=data, autopct="%.1f%%", shadow=True, labels=labels, explode=explode, pctdistance=0.5)
-#   plt.title('App Sentiments')
-#   return fig
+    return sentiment
 
+    # if sentiment=="negative":
+    #     img = np.array(Image.open(neg_sent_mask))
 
+    # elif sentiment=="positive":
+    #     img = np.array(Image.open(pos_sent_mask))
 
-# if __name__ =='__main__':  
-#     app_name = 'tiktok'
-#    # id = 'com.invest.bamboo'
-#     df = AppleUsers_review(app_name)
-    #request_review(id)
-   # fetch_review(id)
-    #process_review()
+    # else:
+    #     img = np.array(Image.open(neu_sent_mask))
+    
+    # img = img+1*255
+
+    # wc = WordCloud(background_color=None, max_font_size=100, max_words=10000, mask=img,
+    #                 mode="RGBA", width=1600, height=800, stopwords=stopwords, colormap=matplotlib.cm.Accent)
+
+    
+    # wc.generate(' '.join(df["cleanReview"]))
+    # fig, ax = plt.subplots()
+    # ax = plt.imshow(wc, interpolation='bilinear')
+    # plt.axis("off")
+    # return fig

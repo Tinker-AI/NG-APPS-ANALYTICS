@@ -1,6 +1,6 @@
 import streamlit as st
 from utility import *
-from sentiment import * 
+from sentimentt import * 
 from game_utils import *
 from PIL import Image
 
@@ -416,25 +416,29 @@ elif Options == "Sentiment Analytics":
     st.markdown('### Want to analyze users feedback in realtime? Select your choice')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
     
-    if se =="GooglePlay Apps (Android)":
-        try:
-            id = st.text_input("What's the App's ID on Playstore?")
-            df = fetchPlaystorereviews(id)
-            # st.write(df)
-            df["Sentiment"] = df["review"].apply(sentiment_scores)
-            st.write(df)
-            st.pyplot(sentiment_chart(df))
-            st.pyplot(sentiments_and_word_cloud(df))
 
-        except:
-            pass
+    if se =="GooglePlay Apps (Android)":
+        id = st.text_input("What's the Nigerian App's ID on Playstore? e.g com.invest.bamboo")
+        st.write("Fetching all reviews from Playstore may take a little while...")
+        
+        df = fetchPlaystorereviews(id)
+        st.write(df)
+        df["cleanReview"] = [preprocessReview(review) for review in df["review"]]
+        df["Sentiment"] = df["cleanReview"].apply(sentiment_scores)
+        st.pyplot(sentiment_chart(df))
+        st.write(sentiments_and_word_cloud(df))
+
+            
+      
 
     elif se =="AppStore Apps (iOS)":
         try:
-            app_name = st.text_input("What's the App's Name on Appstore?")
+            app_name = st.text_input("What's the Nigerian App's Name on Appstore?")
+            st.write("Fetching all reviews from Appstore may take a while...")
             df = fetchAppstorereviews(app_name)
             st.write(df)
-            df["Sentiment"] = df["review"].apply(sentiment_scores)
+            df["cleanReview"] = [preprocessReview(review) for review in df["review"]]
+            df["Sentiment"] = df["cleanReview"].apply(sentiment_scores)
             st.pyplot(sentiment_chart(df))
             st.pyplot(sentiments_and_word_cloud(df))
 
