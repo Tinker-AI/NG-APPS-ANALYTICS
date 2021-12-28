@@ -16,7 +16,7 @@ def load_data():
     """ function to clean the data and load into pandas dataframe """
     app_data = pd.read_csv('./data/ModifiedNaijaApps.csv')
     # rename few columns to something recognisable
-    app_data.rename(columns={'title': 'appName', 'genre': 'category'}, inplace=True)
+    app_data.rename(columns={'title': 'appName', 'genre': 'category', 'score': 'starRating'}, inplace=True)
     # Extract month and year
     app_data[['month', 'year']] = app_data['released'].str.split(',', expand=True)
     # convert released date to datetime
@@ -41,7 +41,7 @@ def popular_category(app_data):
     """ This function creates visualization for the most popular category"""
     fig, ax = plt.subplots()
     #fig, ax = plt.subplots()
-    ax = sns.countplot(app_data.category)
+    ax = sns.countplot(app_data.category, color='goldenrod')
     plt.xticks(rotation=90)
     plt.title('Naija app most popular category')
     
@@ -146,26 +146,26 @@ def appType_hist(app_data):
     return fig
 
 def appType_byScore(app_data):
-    """This function returns a histogram that compares the scores(stars) given between paid and free apps"""
+    """This function returns a histogram that compares the stars ratings given between paid and free apps"""
     app_data['app_type'] = ['free' if (x)==0 else 'paid' for x in app_data['price']]
 
     fig, (ax1, ax2) = plt.subplots(1, 2)
     sns.histplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_type",
         multiple="stack",
         ax=ax1
     )
     sns.kdeplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_type",
         multiple="stack",
         ax=ax2
     )
     ax1.set_title("Histogram")
-    ax2.set_title("Kernel density")
+    ax2.set_title("")
 
     return fig
 
@@ -181,8 +181,8 @@ def monthly_download(app_data):
 def popularSize(app_data):
     """This function returns a bar chart that displays the top five most popular app size"""
     fig, ax = plt.subplots()
-    sizez = app_data.groupby('size').size().reset_index(name='Count').nlargest(5, 'Count')
-    ax = sns.barplot(y=sizez['size'], x=sizez['Count'], color='seagreen')
+    sizez = app_data.groupby('size').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
+    ax = sns.barplot(y=sizez['size'], x=sizez['Frequency'], color='seagreen')
 
     return fig
 
@@ -364,20 +364,20 @@ def mdhist_content(app_data):
     fig, (ax1, ax2) = plt.subplots(1, 2)
     sns.histplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="contentRating",
         multiple="stack",
         ax=ax1
     )
     sns.kdeplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="contentRating",
         multiple="stack",
         ax=ax2
     )
     ax1.set_title("Histogram")
-    ax2.set_title("Kernel density")
+    ax2.set_title("")
 
     return fig
 
@@ -414,20 +414,20 @@ def appSizes_hist(app_data):
     fig, (ax1, ax2) = plt.subplots(1, 2)
     sns.histplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_sizes",
         multiple="stack",
         ax=ax1
     )
     sns.kdeplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_sizes",
         multiple="stack",
         ax=ax2
     )
     ax1.set_title("Star Rating")
-    ax2.set_title("Kernel density")
+    ax2.set_title("")
 
     return fig
 
