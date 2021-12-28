@@ -429,3 +429,24 @@ def appSizes_hist(app_data):
     ax2.set_title("Kernel density")
 
     return fig
+
+def get_app(app_id):
+    """
+    This function allow users to add their own product data from playstore for comparison
+    
+    :Input: App ID
+    
+    :Output: Dataframe
+    """
+    result = app(
+        app_id = app_id,
+        lang = 'en',
+        country = 'ng'
+    )
+    keys = ["title", "summary", "free", "genre", "installs", "ratings", "price", "size",
+            "contentRating", "reviews", "released", "adSupported", "sale", "score", "similarApps", "version"]
+    APP = []
+    appDetails2 = {key: result[key] for key in keys}
+    APP.append(appDetails2)
+    data = pd.DataFrame(APP)
+    return data
