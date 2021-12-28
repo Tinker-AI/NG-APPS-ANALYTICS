@@ -7,6 +7,7 @@ import plotly.express as px
 import seaborn as sns
 sns.set_style('whitegrid')
 import streamlit as st
+from google_play_scraper import app
 
 
 
