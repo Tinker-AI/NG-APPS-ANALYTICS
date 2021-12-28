@@ -46,7 +46,7 @@ if Options == "App Analytics":
 
         st.markdown("###### Shows which of the top 5 most popular category was downloaded the most")
         st.altair_chart(top_cat(df))
-        Top_5 = df.groupby('category').size().reset_index(name='Count').nlargest(5, 'Count')
+        Top_5 = df.groupby('category').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
         top_5 = Top_5['category'].tolist()
         top_pop = df.groupby('category')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
         st.write(top_pop)
@@ -131,7 +131,7 @@ if Options == "App Analytics":
         st.markdown('###### This plot shows the top 5 most popular release date across all the category')
         st.altair_chart(popularRelease_date(df))
         # Table representation
-        monthly_release = df.groupby('month').size().reset_index(name='Count').nlargest(5, 'Count')
+        monthly_release = df.groupby('month').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
         top_5 = monthly_release['month'].tolist()
         top_pop = df.groupby('month')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
         st.write(top_pop)
@@ -183,14 +183,14 @@ if Options == "App Analytics":
             st.write('') 
 
             st.markdown("###### Star ratings of top ten different app sizes in {} category".format(category_name))
-            size_var = category_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=True).head(10)
-            fig = px.histogram(size_var, x='score', nbins=10, color='size')
+            size_var = category_data.groupby('size', as_index=False)['starRating'].max().sort_values('starRating', ascending=True).head(10)
+            fig = px.histogram(size_var, x='starRating', nbins=10, color='size')
             st.plotly_chart(fig)
             st.write('')
 
             st.markdown("###### Star ratings of the least ten different app sizes in {} category".format(category_name))
-            size_var = category_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=False).head(10)
-            fig = px.histogram(size_var, x='score', nbins=10, color='size')
+            size_var = category_data.groupby('size', as_index=False)['starRating'].max().sort_values('starRating', ascending=False).head(10)
+            fig = px.histogram(size_var, x='starRating', nbins=10, color='size')
             st.plotly_chart(fig)
             st.write('')
 
@@ -326,7 +326,7 @@ if Options == "Game Analytics":
         st.markdown('###### This plot shows the top 5 most popular release date across all the category')
         st.altair_chart(popularRelease_date(games_df))
         # Table representation
-        monthly_release = games_df.groupby('month').size().reset_index(name='Count').nlargest(5, 'Count')
+        monthly_release = games_df.groupby('month').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
         top_5 = monthly_release['month'].tolist()
         top_pop = games_df.groupby('month')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
         st.write(top_pop)
@@ -377,14 +377,14 @@ if Options == "Game Analytics":
             st.write('') 
 
             st.markdown("###### Star ratings of top ten different game app sizes in {} category".format(category_name))
-            size_var = game_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=True).head(10)
-            fig = px.histogram(size_var, x='score', nbins=10, color='size')
+            size_var = game_data.groupby('size', as_index=False)['starRating'].max().sort_values('starRating', ascending=True).head(10)
+            fig = px.histogram(size_var, x='starRating', nbins=10, color='size')
             st.plotly_chart(fig)
             st.write('')
 
             st.markdown("###### Star ratings of the least ten different game app sizes in {} category".format(category_name))
-            size_var = game_data.groupby('size', as_index=False)['score'].max().sort_values('score', ascending=False).head(10)
-            fig = px.histogram(size_var, x='score', nbins=10, color='size')
+            size_var = game_data.groupby('size', as_index=False)['starRating'].max().sort_values('starRating', ascending=False).head(10)
+            fig = px.histogram(size_var, x='starRating', nbins=10, color='size')
             st.plotly_chart(fig)
             st.write('')
 
@@ -424,8 +424,8 @@ elif Options == "Sentiment Analytics":
     st.markdown('### Want to analyze users feedback in realtime? Select your choice')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
     
-    
-    if se =="GooglePlay Apps (Android)":
+    try:
+      if se =="GooglePlay Apps (Android)":
         id = st.text_input("What's the Nigerian App's ID on Playstore? e.g com.invest.bamboo")
         if id != "":
             with st.spinner('Calling API to fetch result for {}'.format(id)):
@@ -438,20 +438,20 @@ elif Options == "Sentiment Analytics":
             st.success('Done Analysing!')
 
 
-    elif se =="AppStore Apps (iOS)":
-        app_name = st.text_input("What's the Nigerian App's Name on Appstore? e.g kuda-bank")
-        if app_name != "":
-            with st.spinner('Calling API to fetch result for {}'.format(app_name)):
-                df = fetchAppstorereviews(app_name)
-                st.write(df)
-                df["cleanReview"] = [preprocessReview(review) for review in df["review"]]
-                df["Sentiment"] = df["cleanReview"].apply(sentiment_scores)
-                st.pyplot(sentiment_chart(df))
-                st.pyplot(sentiments_and_word_cloud(df))
-            st.success('Done Analysing!')
+      elif se =="AppStore Apps (iOS)":
+            app_name = st.text_input("What's the Nigerian App's Name on Appstore?")
+            if app_name != "":
+                with st.spinner('Calling API to fetch result for {}'.format(app_name)):
+                    df = fetchAppstorereviews(app_name)
+                    st.write(df)
+                    df["cleanReview"] = [preprocessReview(review) for review in df["review"]]
+                    df["Sentiment"] = df["cleanReview"].apply(sentiment_scores)
+                    st.pyplot(sentiment_chart(df))
+                    st.pyplot(sentiments_and_word_cloud(df))
+                st.success('Done Analysing!')
 
-    # except:
-    #     st.write("Kindly verify your input - the app name/id could be wrong.")
+    except:
+        pass
     
 elif Options == "App Comparison":
     ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=(' ', 'Update App Data', 'Update Game Data'))
@@ -512,3 +512,8 @@ hide_streamlit_style = """
 
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+st.write('')
+st.write('')
+st.write('')
+
+st.sidebar.markdown('[Give feedback](https://forms.gle/e1WFWwrRzieFp6an9)')
