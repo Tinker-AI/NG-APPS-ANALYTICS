@@ -117,18 +117,14 @@ def preprocessReview(review):
 def sentiment_scores(sentence):
     """This function calculates the sentiment scores for each review"""
  
-    # Create a SentimentIntensityAnalyzer object.
+     # Create a SentimentIntensityAnalyzer object.
     sid_obj = SentimentIntensityAnalyzer()
  
-    # polarity_scores method of SentimentIntensityAnalyzer
-    # object gives a sentiment dictionary.
-    # which contains pos, neg, neu, and compound scores.
     sentiment_dict = sid_obj.polarity_scores(sentence)
  
     # decide sentiment as positive, negative and neutral
     if sentiment_dict['neu'] > 0.80 and sentiment_dict['neu'] > sentiment_dict['pos'] and sentiment_dict['neu'] > sentiment_dict['neg']:
         result="neutral"
-
     elif sentiment_dict['pos'] > sentiment_dict['neg']:
         result="positive"
     else:
@@ -138,15 +134,15 @@ def sentiment_scores(sentence):
 
 def sentiment_chart(df):
     """Visualizes the sentiments from an app's reviews in form of a pie chart"""  
-
+   
     # using the dataframe to plot a pie chart of the sentiments
     colors = ['lightcoral', 'lightskyblue', 'green']
     pie, ax = plt.subplots()
     plt.xticks(rotation='horizontal')
     x = df.groupby("Sentiment").count()['cleanReview']
+    x = x.sort_values(ascending = False)
+    labels = x.keys()
     
-    labels = list(df["Sentiment"].unique())
-    labels = labels[::-1]
     colors = ['lightcoral', 'lightskyblue', 'green']
 
     plt.pie(x=x, autopct="%1.1f%%", \
