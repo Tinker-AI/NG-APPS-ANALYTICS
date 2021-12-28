@@ -10,12 +10,13 @@ import streamlit as st
 from google_play_scraper import app
 
 
+
 @st.cache(allow_output_mutation=True)
 def load_games():
     """ function to clean the data and load into pandas dataframe """
     app_data = pd.read_csv('./data/games.csv')
     # rename few columns to something recognisable
-    app_data.rename(columns={'title': 'appName', 'genre': 'category'}, inplace=True)
+    app_data.rename(columns={'title': 'appName', 'genre': 'category', 'score': 'starRating'}, inplace=True)
     # Extract month and year
     app_data[['month', 'year']] = app_data['released'].str.split(',', expand=True)
     # convert released date to datetime
@@ -71,7 +72,7 @@ def top_cat(app_data):
     """ This function generates the top five most popular category and saves it to a list
     to generate plot to understand which of these category was downloaded the most
     """
-    Top_5 = app_data.groupby('category').size().reset_index(name='Count').nlargest(5, 'Count')
+    Top_5 = app_data.groupby('category').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
     top_5 = Top_5['category'].tolist()
     top_pop = app_data.groupby('category')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
     # altair plot
@@ -86,7 +87,7 @@ def mostInstalledCat(app_data):
     fig, ax = plt.subplots()
     plt.title('Total installation across all category')
     cat_data = app_data.groupby('category')['installs'].agg('sum').reset_index(name='Total Installs')
-    ax = sns.barplot(y=cat_data['category'], x= cat_data['Total Installs'])
+    ax = sns.barplot(y=cat_data['category'], x= cat_data['Total Installs'], color = 'cyan')
     return fig
 
 def mostReviewedCat(app_data):
@@ -142,20 +143,20 @@ def appType_byScore(app_data):
     fig, (ax1, ax2) = plt.subplots(1, 2)
     sns.histplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_type",
         multiple="stack",
         ax=ax1
     )
     sns.kdeplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_type",
         multiple="stack",
         ax=ax2
     )
     ax1.set_title("Histogram")
-    ax2.set_title("Kernel density")
+    ax2.set_title("")
 
     return fig
 
@@ -170,8 +171,8 @@ def monthly_download(app_data):
 def popularSize(app_data):
     """This function returns a bar chart that displays the top five most popular app size"""
     fig, ax = plt.subplots()
-    sizez = app_data.groupby('size').size().reset_index(name='Count').nlargest(5, 'Count')
-    ax = sns.barplot(y=sizez['size'], x=sizez['Count'], color='seagreen')
+    sizez = app_data.groupby('size').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
+    ax = sns.barplot(y=sizez['size'], x=sizez['Frequency'], color='seagreen')
 
     return fig
 
@@ -281,7 +282,7 @@ def popularRelease_date(app_data):
     """This function returns a bar chart showing the top five most popular time to release app
     and the correlation between the time of release and installation in a tabular chart"""
    
-    monthly_release = app_data.groupby('month').size().reset_index(name='Count').nlargest(5, 'Count')
+    monthly_release = app_data.groupby('month').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
     top_5 = monthly_release['month'].tolist()
     top_pop = app_data.groupby('month')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
     # altair plot
@@ -297,14 +298,14 @@ def mdhist_content(app_data):
     fig, (ax1, ax2) = plt.subplots(1, 2)
     sns.histplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="contentRating",
         multiple="stack",
         ax=ax1
     )
     sns.kdeplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="contentRating",
         multiple="stack",
         ax=ax2
@@ -339,20 +340,20 @@ def appSizes_hist(app_data):
     fig, (ax1, ax2) = plt.subplots(1, 2)
     sns.histplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_sizes",
         multiple="stack",
         ax=ax1
     )
     sns.kdeplot(
         data=app_data,
-        x="score",
+        x="starRating",
         hue="app_sizes",
         multiple="stack",
         ax=ax2
     )
     ax1.set_title("Star Rating")
-    ax2.set_title("Kernel density")
+    ax2.set_title("")
 
     return fig
 
