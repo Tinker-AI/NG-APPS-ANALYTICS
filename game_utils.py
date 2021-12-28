@@ -7,7 +7,7 @@ import plotly.express as px
 import seaborn as sns
 sns.set_style('darkgrid')
 import streamlit as st
-
+from google_play_scraper import app
 
 
 @st.cache(allow_output_mutation=True)
