@@ -424,8 +424,8 @@ elif Options == "Sentiment Analytics":
     st.markdown('### Want to analyze users feedback in realtime? Select your choice')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
     
-    try:
-      if se =="GooglePlay Apps (Android)":
+    
+    if se =="GooglePlay Apps (Android)":
         id = st.text_input("What's the Nigerian App's ID on Playstore? e.g com.invest.bamboo")
         if id != "":
             with st.spinner('Calling API to fetch result for {}'.format(id)):
@@ -438,27 +438,27 @@ elif Options == "Sentiment Analytics":
             st.success('Done Analysing!')
 
 
-      elif se =="AppStore Apps (iOS)":
-            app_name = st.text_input("What's the Nigerian App's Name on Appstore?")
-            if app_name != "":
-                with st.spinner('Calling API to fetch result for {}'.format(app_name)):
-                    df = fetchAppstorereviews(app_name)
-                    st.write(df)
-                    df["cleanReview"] = [preprocessReview(review) for review in df["review"]]
-                    df["Sentiment"] = df["cleanReview"].apply(sentiment_scores)
-                    st.pyplot(sentiment_chart(df))
-                    st.pyplot(sentiments_and_word_cloud(df))
-                st.success('Done Analysing!')
+    elif se =="AppStore Apps (iOS)":
+        app_name = st.text_input("What's the Nigerian App's Name on Appstore? e.g kuda-bank")
+        if app_name != "":
+            with st.spinner('Calling API to fetch result for {}'.format(app_name)):
+                df = fetchAppstorereviews(app_name)
+                st.write(df)
+                df["cleanReview"] = [preprocessReview(review) for review in df["review"]]
+                df["Sentiment"] = df["cleanReview"].apply(sentiment_scores)
+                st.pyplot(sentiment_chart(df))
+                st.pyplot(sentiments_and_word_cloud(df))
+            st.success('Done Analysing!')
 
-    except:
-        pass
+    # except:
+    #     st.write("Kindly verify your input - the app name/id could be wrong.")
     
 elif Options == "App Comparison":
     ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=(' ', 'Update App Data', 'Update Game Data'))
     if ac == "Update App Data":
         with st.spinner('Fetching data info...'):
             form = st.form(key="my-form")
-            id = form.text_input('Enter an app id to save data (eg. com.invest.bamboo)')
+            id = form.text_input('Enter a Nigerian app id on Play Store to save data (eg. com.invest.bamboo)')
             submit = form.form_submit_button('Save')
             st.write('Press save to have your app info exported for analytics')
             if submit:
@@ -480,7 +480,7 @@ elif Options == "App Comparison":
     elif ac == "Update Game Data":
         with st.spinner('Fetching data info...'):
             form = st.form(key="my-form")
-            id = form.text_input('Enter game app id to save data (eg. com.maliyo.whotking)')
+            id = form.text_input('Enter a Nigerian game app id on Play Store to save data (eg. com.maliyo.whotking)')
             submit = form.form_submit_button('Save')
             st.write('Press save to have your app info exported for analytics')
             
