@@ -34,7 +34,7 @@ def fetchPlaystorereviews(id):
       lang='en',        # defaults to 'en'
       country='ng',     # defaults to 'us'
       sort=Sort.NEWEST, # start with most recent
-      count=200       # batch size
+      count=300       # batch size
     )
 
     allResults = []
@@ -69,7 +69,7 @@ def fetchAppstorereviews(app_name):
     """
     RESULT = []
     app = AppStore(country="ng", app_name=app_name)
-    app.review(how_many=1000)
+    app.review(how_many=300)
     for i in range(len(app.reviews)):
         response = app.reviews[i]['review']
         RESULT.append(response)
@@ -154,37 +154,32 @@ def sentiment_chart(df):
                     colors=colors, explode=None, startangle=120)
     plt.title('App Reviews Sentiments', size=15)
     plt.show()
- 
-
+    
+    
 def sentiments_and_word_cloud(df):
 
     pos_sent_mask = "./asset/thumb_up.png"
     neg_sent_mask = "./asset/thumb_down.png"
     neu_sent_mask = "./asset/thumb_side.png"
 
+    sentiment = df["Sentiment"].value_counts().index[0]
+
+    if sentiment=="negative":
+        img = np.array(Image.open(neg_sent_mask))
+
+    elif sentiment=="positive":
+        img = np.array(Image.open(pos_sent_mask))
+
+    else:
+        img = np.array(Image.open(neu_sent_mask))
     
-    # sentiment = df["Sentiment"].value_counts().index[0]
-    sentiment = df.groupby("Sentiment").count()['cleanReview'].index[-1]
+    img = img+1*255
 
-    return sentiment
-
-    # if sentiment=="negative":
-    #     img = np.array(Image.open(neg_sent_mask))
-
-    # elif sentiment=="positive":
-    #     img = np.array(Image.open(pos_sent_mask))
-
-    # else:
-    #     img = np.array(Image.open(neu_sent_mask))
-    
-    # img = img+1*255
-
-    # wc = WordCloud(background_color=None, max_font_size=100, max_words=10000, mask=img,
-    #                 mode="RGBA", width=1600, height=800, stopwords=stopwords, colormap=matplotlib.cm.Accent)
-
-    
-    # wc.generate(' '.join(df["cleanReview"]))
-    # fig, ax = plt.subplots()
-    # ax = plt.imshow(wc, interpolation='bilinear')
-    # plt.axis("off")
-    # return fig
+    wc = WordCloud(background_color=None, max_font_size=100, max_words=10000, mask=img,
+                    mode="RGBA", width=1600, height=1000, stopwords=stopwords, colormap=matplotlib.cm.Accent)
+ 
+    wc.generate(' '.join(df["cleanReview"]))
+    fig, ax = plt.subplots()
+    ax = plt.imshow(wc, interpolation='bilinear')
+    plt.axis("off")
+    return fig
