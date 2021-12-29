@@ -451,53 +451,59 @@ elif Options == "Sentiment Analytics":
                 st.success('Done Analysing!')
 
     except:
-        pass
+        st.write(':warning: Please ensure the correct App ID or App name was supplied or try again!')
     
 elif Options == "App Comparison":
     ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=(' ', 'Update App Data', 'Update Game Data'))
     if ac == "Update App Data":
-        with st.spinner('Fetching data info...'):
-            form = st.form(key="my-form")
-            id = form.text_input('Enter a Nigerian app id on Play Store to save data (eg. com.invest.bamboo)')
-            submit = form.form_submit_button('Save')
-            st.write('Press save to have your app info exported for analytics')
-            if submit:
-                old_df = pd.read_csv('./data/ModifiedNaijaApps.csv')
-                current_data = get_app(id)
-            
-                if current_data.iloc[0,0] in old_df.title.unique():
-                    st.write(f'{id} data already exist!')
+        try:
+            with st.spinner('Fetching data info...'):
+                form = st.form(key="my-form")
+                id = form.text_input('Enter a Nigerian app id on Play Store to save data (eg. com.invest.bamboo)')
+                submit = form.form_submit_button('Save')
+                st.write('Press save to have your app info exported for analytics')
+                if submit:
+                    old_df = pd.read_csv('./data/ModifiedNaijaApps.csv')
+                    current_data = get_app(id)
                 
-                else:
-                    all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
-                    all_data.update(current_data)
-                    st.write('data saved')
-                    #st.success('Sucess! Your data has been saved')
-                    all_data.to_csv('./data/ModifiedNaijaApps.csv', index=False)
-                    st.success('Sucess! Your data has been saved')
+                    if current_data.iloc[0,0] in old_df.title.unique():
+                        st.write(f'{id} data already exist!')
+                    
+                    else:
+                        all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
+                        all_data.update(current_data)
+                        st.write('data saved')
+                        #st.success('Sucess! Your data has been saved')
+                        all_data.to_csv('./data/ModifiedNaijaApps.csv', index=False)
+                        st.success('Sucess! Your data has been saved')
+        except:
+            st.write(':warning: Please ensure the correctness of your input value or try again!')
 
 
     elif ac == "Update Game Data":
-        with st.spinner('Fetching data info...'):
-            form = st.form(key="my-form")
-            id = form.text_input('Enter a Nigerian game app id on Play Store to save data (eg. com.maliyo.whotking)')
-            submit = form.form_submit_button('Save')
-            st.write('Press save to have your app info exported for analytics')
-            
-            if submit:
-                old_df = pd.read_csv('./data/games.csv')
-                current_data = get_app(id)
-            
-                if current_data.iloc[0,0] in old_df.title.unique():  # line that checks if input data already exist in our database
-                    st.write(f'{id} data already exist!')
+        try:
+            with st.spinner('Fetching data info...'):
+                form = st.form(key="my-form")
+                id = form.text_input('Enter a Nigerian game app id on Play Store to save data (eg. com.maliyo.whotking)')
+                submit = form.form_submit_button('Save')
+                st.write('Press save to have your app info exported for analytics')
                 
-                else:
-                    all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
-                    all_data.update(current_data)
-                    st.write('data saved')
-                    #st.success('Sucess! Your data has been saved')
-                    all_data.to_csv('./data/games.csv', index=False)
-                    st.success('Success! Your data has been saved')
+                if submit:
+                    old_df = pd.read_csv('./data/games.csv')
+                    current_data = get_app(id)
+                
+                    if current_data.iloc[0,0] in old_df.title.unique():  # line that checks if input data already exist in our database
+                        st.write(f'{id} data already exist!')
+                    
+                    else:
+                        all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
+                        all_data.update(current_data)
+                        st.write('data saved')
+                        #st.success('Sucess! Your data has been saved')
+                        all_data.to_csv('./data/games.csv', index=False)
+                        st.success('Success! Your data has been saved')
+        except:
+            st.write(':warning: Please ensure the correctness of your input value or try again!')
         
 
 if Options == 'Home':
