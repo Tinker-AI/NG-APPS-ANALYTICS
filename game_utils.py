@@ -116,7 +116,7 @@ def appType(app_data):
     plt.xticks(rotation='horizontal')
     labels = ['Paid', 'Free']
     ax = plt.pie(x=app_type, autopct="%.1f%%", labels=labels, pctdistance=0.9)
-    plt.title('Paid apps vs free apps with respect to installation')
+    #plt.title('Paid apps vs free apps with respect to installation')
     return fig
 
 def wkly_download(app_data):
