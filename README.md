@@ -54,10 +54,8 @@ There are certain things to keep in mind when using this project:
 
 ## Contributors
 Contributor on this project include:
--judeleonard Jude_Leonard
-@aisha-rm
--aisha-rm Aisha Mohammed
-@sharonibejih
--sharonibejih Sharon Ibejih
-@Gbolahan-Aziz
--Gbolahan-Aziz Azeez Gbolahan Razaq
+-Jude Leonard judeleonard
+          Jude_Leonard
+-Aisha Mohammed
+- Sharon Ibejih
+-Azeez Gbolahan Razaq
