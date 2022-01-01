@@ -54,8 +54,7 @@ There are certain things to keep in mind when using this project:
 
 ## Contributors
 Contributor on this project include:
--Jude Leonard judeleonard
-          Jude_Leonard
--Aisha Mohammed
-- Sharon Ibejih
--Azeez Gbolahan Razaq
+-Jude Leonard https://github.com/judeleonard
+- Aisha Mohammed https://github.com/aisha-rm
+- Sharon Ibejih https://github.com/sharonibejih
+- Azeez Gbolahan Razaq https://github.com/Gbolahan-Aziz
