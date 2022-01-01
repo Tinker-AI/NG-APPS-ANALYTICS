@@ -7,11 +7,14 @@ We looked answer questions like:
 - How is a particular Nigerian app performing ?
 - What are the available Nigerian apps in a particular app category ?
 - What categories are doing well the most in the Nigerian app market ?
+
 The project was designed with the intention of not only assisting Product Owners and Developers but the app users too.
 NG App Analytics has made it very easy for Product Owners or Developers to quickly check how  thier app is performing, 
 we also made it easy for developers to easily analyse the Nigerian app market so as to stategically choose a good project to embark on.
 Developers can also analyse the reviews of their apps given by their customers on apple store and play store.
-The data used for this research project was scrapped from playstore with the guardian of a Nigerian app, containing a comprehensive list of Nigerian apps and games of all categories, the app goes by the name "Nigerian apps and games"
+The data used for this research project was scrapped from playstore with the guardian of a Nigerian app, containing a comprehensive list of Nigerian apps and games of all categories, the app goes by the name "Nigerian apps and games".
+
+
 The project has four section namely :
 - App Analytics:
 This section is designed to analyse Nigerian apps of all available categories on Google playstore
