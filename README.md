@@ -39,7 +39,7 @@ There are certain things to be kept in mind when using this project:
 
 
 ## Built With
-- [[python]](https://www.python.org/)
+- [python](https://www.python.org/)
 - altair
 - app-store-scraper
 - google-play-scraper
