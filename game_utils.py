@@ -381,9 +381,9 @@ def get_app(app_id):
 
 def convert_appSize(app_data):
     """
-    This function copies the current dataframe to perform data processing on the app size features that
-    that cleans and convert the app size feature into a float data type and exracts all the different ranges of
-    different app sizes which is saved as a new feature for auto generating star rating plot for the different 
+    This function copies the current dataframe to perform data processing on the game app size features, that
+    that cleans and convert the app size feature into a float data type, and exracts all the different ranges of
+    different app sizes which are saved as a new feature for auto generating star rating plot for the different 
     set size range. Only the sizes present within the dataframe feature will be returned and displayed on the plot, 
     otherwise nothing is returned for the sizes not present in the set range
     
@@ -395,7 +395,7 @@ def convert_appSize(app_data):
     generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('M', ' ') if 'M' in str(x) else x)
     generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace(',' , ' ') if ',' in str(x) else x)
     generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('Varies with device', 'NaN') if 'Varies with device' in str(x) else x)
-    # convert to float
+    # convert to float and convert all values in kb to MB
     generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('1 015', '1015'))
     generic_data['size'] = generic_data['size'].apply(lambda x: float(str(x).replace('k' , ' '))/1000 if 'k' in str(x) else x)
     generic_data['size'] = generic_data['size'].apply(lambda x: float(x))
