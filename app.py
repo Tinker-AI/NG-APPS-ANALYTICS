@@ -73,7 +73,7 @@ if Options == "App Analytics":
         st.pyplot(wkly_download(df))
         st.write('')
 
-        st.write("###### This plot compares all the reviews given between paid and free apps across all category")
+        st.write("###### The colored vertical lines compares the average reviews given between paid and free apps across all category")
         st.pyplot(appType_hist(df))
         st.write('')
 
@@ -93,8 +93,12 @@ if Options == "App Analytics":
         st.pyplot(appSize_bar(df))
         st.write('')
 
-        st.write('###### This plot compares the average star rating for the top 5 most downloaded app Size across all category')
+        st.write('###### This plot compares the average star rating for some common app sizes across all category')
         st.pyplot(appSizes_hist(df))
+        st.write('')
+
+        st.write('###### This plot shows the average star rating for the different app size range across all category')
+        st.pyplot(convert_appSize(df))
         st.write('')
 
         st.markdown('###### This plot displays the variation between content rating and installation across all category')
@@ -218,6 +222,10 @@ if Options == "App Analytics":
             st.plotly_chart(content_rate(category_data))
             st.write('')
 
+            st.write('###### This plot shows the average star rating for the different app size range in {}'.format(category_name))
+            st.pyplot(convert_appSize(category_data))
+            st.write('')
+
             st.markdown('###### This plot shows the statistics distribution between paid and free {} apps based on their star rating'.format(category_name))
             st.pyplot(appType_byScore(category_data))
             st.write('')
@@ -275,11 +283,11 @@ if Options == "Game Analytics":
         st.pyplot(wkly_download(games_df))
         st.write('')
 
-        st.write("###### This plot compares all the reviews given between paid and free apps across all category")
+        st.write("###### The colored vertical lines compares the average reviews given between paid and free apps in the x-axis across all category")
         st.pyplot(appType_hist(games_df))
         st.write('')
 
-        st.write("###### This plot shows the average star rating between paid and free apps across all category")
+        st.write("###### This plot highlights the average star rating given between paid and free apps across all category") 
         st.pyplot(appType_byScore(games_df))
         st.write('')
 
@@ -317,6 +325,10 @@ if Options == "Game Analytics":
 
         st.markdown("###### This plot shows the most downloaded game across all the category")
         st.pyplot(Mostdownloaded_app(games_df))
+        st.write('')
+
+        st.markdown('###### This plot shows the average star rating for the different game size range across all category')
+        st.pyplot(convert_appSize(games_df))
         st.write('')
 
         st.markdown('###### This plot shows the most reviewed game across all the category')
@@ -414,6 +426,10 @@ if Options == "Game Analytics":
 
             st.markdown('###### Statistics distribution between paid and free {} game apps based on their star rating'.format(category_name))
             st.pyplot(appType_byScore(game_data))
+            st.write('')
+
+            st.markdown('###### This plot shows the average star rating for the different app size range in {}'.format(category_name))   #_______#
+            st.pyplot(convert_appSize(game_data))
             st.write('')
         except ValueError:
             st.markdown("""<h2 style='text-align: center; color: skyblue;'>Sorry this feature does not have enough data to display this chart</h2><p style='color: skyblue;'>""", unsafe_allow_html=True)    #<br></h1>""", unsafe_allow_html=True
