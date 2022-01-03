@@ -28,13 +28,13 @@ This section is designed to analyse customer reviews of Nigerian apps on both pl
 
 ## How to Install and Run the Project
 Steps to install this project include :
-- create a python environment on your local machine
-- install all the dependencies on the requirement.txt file in the repository on your local machine. Make sure to install all the dependencies on the python environment you created for this project
-- cloning the github repository
-- pulling or download the cloned repository to your local machine
-- open the repository through your favorite code editor, eg Visual Studio Code
-- run the codes to check for errors or absent dependency
-- if there is no errors, on your code editor's terminal  simply run,  streamlit run app.py 
+- Create a python environment on your local machine
+- Install all the dependencies on the requirement.txt file in the repository on your local machine. Make sure to install all the dependencies on the python environment you created for this project
+- Clone the github repository
+- Git pull or download the cloned repository to your local machine
+- Open the repository through your favorite code editor, eg Visual Studio Code
+- Run the codes to check for errors or absent dependency
+- If there is no errors, on your code editor's terminal  simply run,  streamlit run app.py 
 - The project should be running in your default browser , if its not running automatically, simply copy and open the link on your terminal on your browser
 
 ## How to Use the Project
