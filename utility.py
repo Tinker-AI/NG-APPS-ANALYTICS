@@ -1,8 +1,10 @@
 from enum import auto
-from altair.vegalite.v4.schema.core import Orientation
+from altair.vegalite.v4.api import condition
+from altair.vegalite.v4.schema.core import Header, Orientation
 import matplotlib.pyplot as plt
 import altair as alt
 import pandas as pd
+import numpy as np
 import plotly.express as px
 import seaborn as sns
 sns.set_style('whitegrid')
@@ -51,13 +53,15 @@ def top_cat(app_data):
     """ This function generates the top five most popular category and saves it to a list
     to generate plot to understand which of these category was downloaded the most
     """
-    Top_5 = app_data.groupby('category').size().reset_index(name='Count').nlargest(5, 'Count')
+    Top_5 = app_data.groupby('category').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
     top_5 = Top_5['category'].tolist()
     top_pop = app_data.groupby('category')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
     # altair plot
     fig = alt.Chart(top_pop).mark_bar().properties(width=500, height=500).encode(
     x = 'category',
     y = 'Total Installs'
+    ).configure_axisX(
+        labelAngle=45
     )
     return fig
 
@@ -347,7 +351,7 @@ def popularRelease_date(app_data):
     """This function returns a bar chart showing the top five most popular time to release app
     and the correlation between the time of release and installation in a tabular chart"""
    
-    monthly_release = app_data.groupby('month').size().reset_index(name='Count').nlargest(5, 'Count')
+    monthly_release = app_data.groupby('month').size().reset_index(name='Frequency').nlargest(5, 'Frequency')
     top_5 = monthly_release['month'].tolist()
     top_pop = app_data.groupby('month')['installs'].agg(sum).loc[top_5].reset_index(name='Total Installs')
     # altair plot
@@ -451,3 +455,62 @@ def get_app(app_id):
     APP.append(appDetails2)
     data = pd.DataFrame(APP)
     return data
+
+def convert_appSize(app_data):
+    """
+    This function copies the current dataframe to perform data processing on the app size features that
+    that cleans and convert the app size feature into a float data type and exracts all the different ranges of
+    different app sizes which is saved as a new feature for auto generating star rating plot for the different 
+    set size range. Only the sizes present within the dataframe feature will be returned and displayed on the plot, 
+    otherwise nothing is returned for the sizes not present in the set range
+    
+    :Input: dataframe
+    :Ouput: histogram plot 
+    """
+    # create a copy of dataframe to work with
+    generic_data = app_data.copy()
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('M', ' ') if 'M' in str(x) else x)
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace(',' , ' ') if ',' in str(x) else x)
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('Varies with device', 'NaN') if 'Varies with device' in str(x) else x)
+    # convert to float
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('1 015', '1015'))
+    generic_data['size'] = generic_data['size'].apply(lambda x: float(str(x).replace('k' , ' '))/1000 if 'k' in str(x) else x)
+    generic_data['size'] = generic_data['size'].apply(lambda x: float(x))
+    # create new dataframe with new generated input size values
+    generic_data['size_bins_category'] = generic_data['size'].apply(categorize_size)
+    
+    # generate plot
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    sns.histplot(
+        data=generic_data,
+        x="starRating",
+        hue="size_bins_category",
+        multiple="stack",
+        ax=ax1
+    )
+    sns.kdeplot(
+        data=generic_data,
+        x="starRating",
+        hue="size_bins_category",
+        multiple="stack",
+        ax=ax2
+    )
+    ax1.set_title("Star Rating")
+    ax2.set_title("")
+
+    return fig
+
+def categorize_size(x):
+    """ This function is used to auto generate the range for the different app sizes"""
+    if x <= 10.0:
+        return '(1-10)MB'
+    elif x > 10.0 and x <= 30.0:
+        return '(11-30)MB'
+    elif x > 30.0 and x <= 90.0:
+        return '(31-90)MB'
+    elif x > 90.0 and x <= 200.0:
+        return '(91-200)MB'
+    elif x > 200.0 and x <= 500.0:
+        return '(201-500)MB'
+    elif x > 500.0:
+        return 'above 600MB'
