@@ -34,7 +34,7 @@ Steps to install this project include :
 - Git pull or download the cloned repository to your local machine
 - Open the repository through your favorite code editor, eg Visual Studio Code
 - Run the codes to check for errors or absent dependency
-- If there is no errors, on your code editor's terminal  simply run,  streamlit run app.py 
+- If there are no errors, on your code editor's terminal  simply run,  streamlit run app.py 
 - The project should be running in your default browser , if its not running automatically, simply copy and open the link on your terminal on your browser
 
 ## How to Use the Project
