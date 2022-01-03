@@ -57,14 +57,14 @@ def genre(app_data):
                    ha = 'center', va = 'center', xytext = (0, 10), textcoords = 'offset points')
     plt.gcf().set_size_inches(10,7)
     plt.ylabel('Total sum')
-   # st.title('Game Types on Playstore')
+    plt.xticks(rotation=45)
     plt.tight_layout()
     return fig
 
 def count_installs(app_data): # previous plot keeps appearing on top of this
     fig, ax = plt.subplots()
     ax = sns.countplot(x=app_data.installs, color='blue')
-    plt.xticks(rotation=90)
+    plt.xticks(rotation=45)
     # plt.gcf().set_size_inches(15,7)
     return fig
 
@@ -377,3 +377,63 @@ def get_app(app_id):
     APP.append(appDetails2)
     data = pd.DataFrame(APP)
     return data
+
+
+def convert_appSize(app_data):
+    """
+    This function copies the current dataframe to perform data processing on the app size features that
+    that cleans and convert the app size feature into a float data type and exracts all the different ranges of
+    different app sizes which is saved as a new feature for auto generating star rating plot for the different 
+    set size range. Only the sizes present within the dataframe feature will be returned and displayed on the plot, 
+    otherwise nothing is returned for the sizes not present in the set range
+    
+    :Input: dataframe
+    :Ouput: histogram plot 
+    """
+    # create a copy of dataframe to work with
+    generic_data = app_data.copy()
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('M', ' ') if 'M' in str(x) else x)
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace(',' , ' ') if ',' in str(x) else x)
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('Varies with device', 'NaN') if 'Varies with device' in str(x) else x)
+    # convert to float
+    generic_data['size'] = generic_data['size'].apply(lambda x: str(x).replace('1 015', '1015'))
+    generic_data['size'] = generic_data['size'].apply(lambda x: float(str(x).replace('k' , ' '))/1000 if 'k' in str(x) else x)
+    generic_data['size'] = generic_data['size'].apply(lambda x: float(x))
+    # create new dataframe with new generated input size values
+    generic_data['size_bins_category'] = generic_data['size'].apply(categorize_size)
+
+     # generate plot
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    sns.histplot(
+        data=generic_data,
+        x="starRating",
+        hue="size_bins_category",
+        multiple="stack",
+        ax=ax1
+    )
+    sns.kdeplot(
+        data=generic_data,
+        x="starRating",
+        hue="size_bins_category",
+        multiple="stack",
+        ax=ax2
+    )
+    ax1.set_title("Star Rating")
+    ax2.set_title("")
+
+    return fig
+
+def categorize_size(x):
+    """ This function is used to auto generate the range for the different app sizes"""
+    if x <= 10.0:
+        return '(1-10)MB'
+    elif x > 10.0 and x <= 30.0:
+        return '(11-30)MB'
+    elif x > 30.0 and x <= 90.0:
+        return '(31-90)MB'
+    elif x > 90.0 and x <= 200.0:
+        return '(91-200)MB'
+    elif x > 200.0 and x <= 500.0:
+        return '(201-500)MB'
+    elif x > 500.0:
+        return 'above 600MB'
