@@ -1,5 +1,6 @@
 # Nigerian App Analytics
 
+
 ## Project Description
 Nigerian App Analytics is a research project on the Nigerian app market.
 We looked answer questions like:
@@ -28,20 +29,17 @@ This section is designed to analyse customer reviews of Nigerian apps on both pl
 
 ## How to Install and Run the Project
 Steps to install this project include :
-- Create a python environment on your local machine
-- Install all the dependencies on the requirement.txt file in the repository on your local machine. Make sure to install all the dependencies on the python environment you created for this project
-- Clone the github repository
-- Git pull or download the cloned repository to your local machine
-- Open the repository through your favorite code editor, eg Visual Studio Code
-- Run the codes to check for errors or absent dependency
-- If there are no errors, on your code editor's terminal  simply run,  streamlit run app.py 
-- The project should be running in your default browser , if its not running automatically, simply copy and open the link on your terminal on your browser
+- Clone the github repository by running `git clone https://github.com/NG-APP-ANALYTICS/Playstore-apps.git`
+- Create and activate a virtual environment on your local machine
+- Using your terminal and in your virtual environment, install all the dependencies in the requirement.txt file by running `pip install -r requirements.txt`
+- After installing all requirements, you should be able to run streamlit run app.py, successfully.
+- This should automatically redirect you to your default browser. If it doesn't, simply copy and open the Local URL on your terminal to your browser.
 
 ## How to Use the Project
 There are certain things to be kept in mind when using this project:
 - We had major constraint with data because there was little available Nigerian apps on some categories
 - When using any feature that involves using app id or app name. App must be explicitly Nigerian
-- When using app id , the app id needs to be without extra characters like so  com.jumia.android, the app id for [JUMIA](https://play.google.com/store/apps/details?id=com.jumia.android&hl=en&gl=US)
+- When using app id , the app id needs to be without extra characters like so  _com.jumia.android_, the app id for [JUMIA](https://play.google.com/store/apps/details?id=com.jumia.android&hl=en&gl=US)
 
 
 ## Built With
