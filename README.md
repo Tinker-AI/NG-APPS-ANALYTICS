@@ -36,7 +36,7 @@ Steps to install this project include :
 - Using your terminal and in your virtual environment, install all the dependencies in the requirement.txt file by running
 
   `pip install -r requirements.txt`
-- After installing all requirements, you should be able to run streamlit run app.py, successfully.
+- After installing all requirements, you should be able to run `streamlit run app.py`, successfully.
 - This should automatically redirect you to your default browser. If it doesn't, simply copy and open the Local URL on your terminal to your browser.
 
 ## How to Use the Project
