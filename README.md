@@ -31,11 +31,11 @@ This section is designed to analyse customer reviews of Nigerian apps on both pl
 Steps to install this project include :
 - Clone the github repository by running
  
-`git clone https://github.com/NG-APP-ANALYTICS/Playstore-apps.git`
+  `git clone https://github.com/NG-APP-ANALYTICS/Playstore-apps.git`
 - Create and activate a virtual environment on your local machine
 - Using your terminal and in your virtual environment, install all the dependencies in the requirement.txt file by running
 
-`pip install -r requirements.txt`
+  `pip install -r requirements.txt`
 - After installing all requirements, you should be able to run streamlit run app.py, successfully.
 - This should automatically redirect you to your default browser. If it doesn't, simply copy and open the Local URL on your terminal to your browser.
 
