@@ -4,6 +4,7 @@ from utility import *
 from sentiment import * 
 from game_utils import *
 from PIL import Image
+import base64
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -470,7 +471,17 @@ elif Options == "Sentiment Analytics":
         st.write(':warning: Please ensure the correct App ID or App name was supplied or try again!')
     
 elif Options == "App Comparison":
-    ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=(' ', 'Update App Data', 'Update Game Data'))
+    ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=('', 'Update App Data', 'Update Game Data'))
+    if ac == "":
+        gif_path = open("./asset/pointer.gif", "rb")
+        gif_file = gif_path.read()
+        local_url = base64.b64encode(gif_file).decode("utf-8")
+        gif_path.close()
+        st.markdown(
+            f'<img src="data:image/gif;base64,{local_url}" alt="pointer gif">', unsafe_allow_html=True,
+        )
+        st.write("##### Navigate to sidebar to select your option")
+
     if ac == "Update App Data":
         try:
             with st.spinner('Fetching data info...'):
