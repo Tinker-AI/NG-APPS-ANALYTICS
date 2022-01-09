@@ -25,7 +25,7 @@ def home_page():
 
 st.sidebar.title('Menu')
 Options = st.sidebar.selectbox(
-    '', ['Home', 'App Analytics', 'Game Analytics', 'App Comparison', 'Sentiment Analytics'], index=0
+    '', ['Home', 'App Analytics', 'Game Analytics', 'Update App', 'Sentiment Analytics'], index=0
 )
 
 if Options == "App Analytics":
@@ -438,7 +438,7 @@ if Options == "Game Analytics":
 elif Options == "Sentiment Analytics":
     img = Image.open("./asset/sentiment.jpg")
     st.image(img)
-    st.markdown('### Want to analyze users feedback in realtime? Select your choice')
+    st.markdown('### Want to analyze users feedback in realtime? Select your choice from the sidebar')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
     
     try:
@@ -470,7 +470,7 @@ elif Options == "Sentiment Analytics":
     except:
         st.write(':warning: Please ensure the correct App ID or App name was supplied or try again!')
     
-elif Options == "App Comparison":
+elif Options == "Update App":
     ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=('', 'Update App Data', 'Update Game Data'))
     if ac == "":
         gif_path = open("./asset/pointer.gif", "rb")
@@ -549,4 +549,6 @@ st.write('')
 st.write('')
 st.write('')
 
+#st.sidebar.markdown('Checkout this document on how to')
 st.sidebar.markdown('[Give feedback](https://forms.gle/e1WFWwrRzieFp6an9)')
+st.sidebar.markdown('Made with :heart: by TinkerAI')
