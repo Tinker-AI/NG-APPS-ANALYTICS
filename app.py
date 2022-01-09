@@ -20,7 +20,7 @@ def home_page():
     st.subheader("")
     st.subheader("")
     st.subheader("")
-    img = Image.open("./asset/TINKER AI.jpg")
+    img = Image.open("./asset/TINKER AI(1).png")
     st.image(img)
 
 st.sidebar.title('Menu')
@@ -471,7 +471,7 @@ elif Options == "Sentiment Analytics":
         st.write(':warning: Please ensure the correct App ID or App name was supplied or try again!')
     
 elif Options == "Update App":
-    ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=('', 'Update App Data', 'Update Game Data'))
+    ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=('', 'Add Apps Data', 'Add Games Data'))
     if ac == "":
         gif_path = open("./asset/pointer.gif", "rb")
         gif_file = gif_path.read()
@@ -482,7 +482,7 @@ elif Options == "Update App":
         )
         st.write("##### Navigate to sidebar to select your option")
 
-    if ac == "Update App Data":
+    if ac == "Add Apps Data":
         try:
             with st.spinner('Fetching data info...'):
                 form = st.form(key="my-form")
@@ -507,7 +507,7 @@ elif Options == "Update App":
             st.write(':warning: Please ensure the correctness of your input value or try again!')
 
 
-    elif ac == "Update Game Data":
+    elif ac == "Add Games Data":
         try:
             with st.spinner('Fetching data info...'):
                 form = st.form(key="my-form")
