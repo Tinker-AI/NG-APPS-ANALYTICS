@@ -4,6 +4,7 @@ from utility import *
 from sentiment import * 
 from game_utils import *
 from PIL import Image
+import base64
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -437,7 +438,7 @@ if Options == "Game Analytics":
 elif Options == "Sentiment Analytics":
     img = Image.open("./asset/sentiment.jpg")
     st.image(img)
-    st.markdown('### Want to analyze users feedback in realtime? Select your choice')
+    st.markdown('### Want to analyze users feedback in realtime? Select your choice from the sidebar')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
     
     try:
@@ -539,5 +540,6 @@ st.write('')
 st.write('')
 st.write('')
 
+#st.sidebar.markdown('Checkout this document on how to')
 st.sidebar.markdown('[Give feedback](https://forms.gle/e1WFWwrRzieFp6an9)')
 st.sidebar.markdown('Made with :heart: by TinkerAI')
