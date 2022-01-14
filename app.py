@@ -19,12 +19,12 @@ def home_page():
     st.subheader("")
     st.subheader("")
     st.subheader("")
-    img = Image.open("./asset/TINKER AI.jpg")
+    img = Image.open("./asset/TINKERAI.png")
     st.image(img)
 
 st.sidebar.title('Menu')
 Options = st.sidebar.selectbox(
-    '', ['Home', 'App Analytics', 'Game Analytics', 'App Comparison', 'Sentiment Analytics'], index=0
+    '', ['Home', 'App Analytics', 'Game Analytics', 'Sentiment Analytics'], index=0
 )
 
 if Options == "App Analytics":
@@ -442,7 +442,7 @@ elif Options == "Sentiment Analytics":
     
     try:
       if se =="GooglePlay Apps (Android)":
-        id = st.text_input("What's the Nigerian App's ID on Playstore? e.g com.invest.bamboo")
+        id = st.text_input("What's the Nigerian App's ID on Playstore? e.g: com.invest.bamboo")
         if id != "":
             with st.spinner('Calling API to fetch result for {}'.format(id)):
                 df = fetchPlaystorereviews(id)
@@ -455,7 +455,7 @@ elif Options == "Sentiment Analytics":
 
 
       elif se =="AppStore Apps (iOS)":
-            app_name = st.text_input("What's the Nigerian App's Name on Appstore?")
+            app_name = st.text_input("What's the Nigerian App's Name on Appstore? e.g: kuda-bank")
             if app_name != "":
                 with st.spinner('Calling API to fetch result for {}'.format(app_name)):
                     df = fetchAppstorereviews(app_name)
@@ -468,58 +468,59 @@ elif Options == "Sentiment Analytics":
 
     except:
         st.write(':warning: Please ensure the correct App ID or App name was supplied or try again!')
-    
-elif Options == "App Comparison":
-    ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=(' ', 'Update App Data', 'Update Game Data'))
-    if ac == "Update App Data":
-        try:
-            with st.spinner('Fetching data info...'):
-                form = st.form(key="my-form")
-                id = form.text_input('Enter a Nigerian app id on Play Store to save data (eg. com.invest.bamboo)')
-                submit = form.form_submit_button('Save')
-                st.write('Press save to have your app info exported for analytics')
-                if submit:
-                    old_df = pd.read_csv('./data/ModifiedNaijaApps.csv')
-                    current_data = get_app(id)
+
+## COMMENTED THE CODES FOR APP COMPARISON -- AT THIS TIME, LETTING USERS ADD NEW APPS TAMPERS WITH THE DF WHICH AFFECTS THE APP ANALYTICS VISUALS
+# elif Options == "App Comparison":
+#     ac = st.sidebar.radio(label="Add your app id to save and head over to analytics to compare", options=(' ', 'Update App Data', 'Update Game Data'))
+#     if ac == "Update App Data":
+#         try:
+#             with st.spinner('Fetching data info...'):
+#                 form = st.form(key="my-form")
+#                 id = form.text_input('Enter a Nigerian app id on Play Store to save data (eg. com.invest.bamboo)')
+#                 submit = form.form_submit_button('Save')
+#                 st.write('Press save to have your app info exported for analytics')
+#                 if submit:
+#                     old_df = pd.read_csv('./data/ModifiedNaijaApps.csv')
+#                     current_data = get_app(id)
                 
-                    if current_data.iloc[0,0] in old_df.title.unique():
-                        st.write(f'{id} data already exist!')
+#                     if current_data.iloc[0,0] in old_df.title.unique():
+#                         st.write(f'{id} data already exist!')
                     
-                    else:
-                        all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
-                        all_data.update(current_data)
-                        st.write('data saved')
-                        #st.success('Sucess! Your data has been saved')
-                        all_data.to_csv('./data/ModifiedNaijaApps.csv', index=False)
-                        st.success('Sucess! Your data has been saved')
-        except:
-            st.write(':warning: Please ensure the correctness of your input value or try again!')
+#                     else:
+#                         all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
+#                         all_data.update(current_data)
+#                         st.write('data saved')
+#                         #st.success('Sucess! Your data has been saved')
+#                         all_data.to_csv('./data/ModifiedNaijaApps.csv', index=False)
+#                         st.success('Sucess! Your data has been saved')
+#         except:
+#             st.write(':warning: Please ensure the correctness of your input value or try again!')
 
 
-    elif ac == "Update Game Data":
-        try:
-            with st.spinner('Fetching data info...'):
-                form = st.form(key="my-form")
-                id = form.text_input('Enter a Nigerian game app id on Play Store to save data (eg. com.maliyo.whotking)')
-                submit = form.form_submit_button('Save')
-                st.write('Press save to have your app info exported for analytics')
+#     elif ac == "Update Game Data":
+#         try:
+#             with st.spinner('Fetching data info...'):
+#                 form = st.form(key="my-form")
+#                 id = form.text_input('Enter a Nigerian game app id on Play Store to save data (eg. com.maliyo.whotking)')
+#                 submit = form.form_submit_button('Save')
+#                 st.write('Press save to have your app info exported for analytics')
                 
-                if submit:
-                    old_df = pd.read_csv('./data/games.csv')
-                    current_data = get_app(id)
+#                 if submit:
+#                     old_df = pd.read_csv('./data/games.csv')
+#                     current_data = get_app(id)
                 
-                    if current_data.iloc[0,0] in old_df.title.unique():  # line that checks if input data already exist in our database
-                        st.write(f'{id} data already exist!')
+#                     if current_data.iloc[0,0] in old_df.title.unique():  # line that checks if input data already exist in our database
+#                         st.write(f'{id} data already exist!')
                     
-                    else:
-                        all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
-                        all_data.update(current_data)
-                        st.write('data saved')
-                        #st.success('Sucess! Your data has been saved')
-                        all_data.to_csv('./data/games.csv', index=False)
-                        st.success('Success! Your data has been saved')
-        except:
-            st.write(':warning: Please ensure the correctness of your input value or try again!')
+#                     else:
+#                         all_data = pd.concat([old_df, current_data[~current_data.index.isin(old_df.index)]])
+#                         all_data.update(current_data)
+#                         st.write('data saved')
+#                         #st.success('Sucess! Your data has been saved')
+#                         all_data.to_csv('./data/games.csv', index=False)
+#                         st.success('Success! Your data has been saved')
+#         except:
+#             st.write(':warning: Please ensure the correctness of your input value or try again!')
         
 
 if Options == 'Home':
@@ -539,3 +540,4 @@ st.write('')
 st.write('')
 
 st.sidebar.markdown('[Give feedback](https://forms.gle/e1WFWwrRzieFp6an9)')
+st.sidebar.markdown('Made with :heart: by TinkerAI')
