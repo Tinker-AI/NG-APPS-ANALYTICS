@@ -1,5 +1,8 @@
 # Nigerian App Analytics
 
+![GitHub contributors](https://img.shields.io/github/contributors/Tinker-AI/NG-APPS-ANALYTICS?logo=c)  ![GitHub last commit](https://img.shields.io/github/last-commit/Tinker-AI/NG-APPS-ANALYTICS?color=cyan&logo=git)        ![GitHub issues](https://img.shields.io/github/issues/Tinker-AI/NG-APPS-ANALYTICS?style=plastic)  
+![GitHub pull requests](https://img.shields.io/github/issues-pr/Tinker-AI/NG-APPS-ANALYTICS?color=goldenrod&logo=github)
+
 
 ## Project Description
 Nigerian App Analytics is a research project on the Nigerian app market.
@@ -61,9 +64,9 @@ There are certain things to be kept in mind when using this project:
 - [Wordcloud](https://pypi.org/project/wordcloud/)
 
 ## Contributors
-Contributor on this project include:
 
-- [Jude Leonard](https://github.com/judeleonard)
-- [Aisha Mohammed](https://github.com/aisha-rm)
-- [Sharon Ibejih](https://github.com/sharonibejih)
-- [Azeez Razaq](https://github.com/Gbolahan-Aziz)
+- [![Jude Leonard Ndu](https://img.shields.io/badge/Author-@JudeLeonard-gray.svg?colorA=gray&colorB=dodgergreen&logo=github)](https://www.github.com/judeleonard/)
+- [![Aisha Mohammed](https://img.shields.io/badge/Contributor-@Aisharm-gray.svg?colorA=pink&colorB=gray&logo=github)](https://github.com/aisha-rm)
+- [![Sharon Ibejih](https://img.shields.io/badge/Author-@sharonibejih-white.svg?colorA=goldenrod&colorB=gray&logo=github)](https://github.com/sharonibejih)
+- [![Azeez Razaq](https://img.shields.io/badge/Contributor-@Gbolahan-gray.svg?colorA=cyan&colorB=gray&logo=github)](https://github.com/Gbolahan-Aziz)
+
