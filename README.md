@@ -62,9 +62,8 @@ There are certain things to be kept in mind when using this project:
 - [Wordcloud](https://pypi.org/project/wordcloud/)
 
 ## Contributors
-
-- [![Jude Leonard Ndu](https://img.shields.io/badge/Author-@JudeLeonard-gray.svg?colorA=gray&colorB=dodgergreen&logo=github)](https://www.github.com/judeleonard/)
-- [![Aisha Mohammed](https://img.shields.io/badge/Contributor-@Aisharm-gray.svg?colorA=pink&colorB=gray&logo=github)](https://github.com/aisha-rm)
-- [![Sharon Ibejih](https://img.shields.io/badge/Author-@sharonibejih-white.svg?colorA=goldenrod&colorB=gray&logo=github)](https://github.com/sharonibejih)
-- [![Azeez Razaq](https://img.shields.io/badge/Contributor-@Gbolahan-gray.svg?colorA=cyan&colorB=gray&logo=github)](https://github.com/Gbolahan-Aziz)
+[![Jude Leonard Ndu](https://img.shields.io/badge/Author-@JudeLeonard-gray.svg?colorA=gray&colorB=dodgergreen&logo=github)](https://www.github.com/judeleonard/) 
+ [![Sharon Ibejih](https://img.shields.io/badge/Author-@sharonibejih-white.svg?colorA=goldenrod&colorB=gray&logo=github)](https://github.com/sharonibejih)
+ [![Aisha Mohammed](https://img.shields.io/badge/Contributor-@Aisharm-gray.svg?colorA=pink&colorB=gray&logo=github)](https://github.com/aisha-rm)
+ [![Azeez Razaq](https://img.shields.io/badge/Contributor-@Gbolahan-gray.svg?colorA=cyan&colorB=gray&logo=github)](https://github.com/Gbolahan-Aziz)
 
