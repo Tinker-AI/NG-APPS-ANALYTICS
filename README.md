@@ -1,7 +1,7 @@
 # Nigerian App Analytics
 
-![GitHub contributors](https://img.shields.io/github/contributors/Tinker-AI/NG-APPS-ANALYTICS?logo=c)  ![GitHub last commit](https://img.shields.io/github/last-commit/Tinker-AI/NG-APPS-ANALYTICS?color=cyan&logo=git)      
-![GitHub issues](https://img.shields.io/github/issues/Tinker-AI/NG-APPS-ANALYTICS?style=plastic)  ![GitHub pull requests](https://img.shields.io/github/issues-pr/Tinker-AI/NG-APPS-ANALYTICS?color=goldenrod&logo=github)
+![GitHub contributors](https://img.shields.io/github/contributors/Tinker-AI/NG-APPS-ANALYTICS?logo=c)  ![GitHub last commit](https://img.shields.io/github/last-commit/Tinker-AI/NG-APPS-ANALYTICS?color=cyan&logo=git)  ![GitHub issues](https://img.shields.io/github/issues/Tinker-AI/NG-APPS-ANALYTICS?style=plastic)  ![GitHub pull requests](https://img.shields.io/github/issues-pr/Tinker-AI/NG-APPS-ANALYTICS?color=goldenrod&logo=github)
+     
 
 
 ## Project Description
@@ -19,13 +19,11 @@ Developers can also analyse the reviews of their apps given by their customers o
 The data used for this research project was scrapped from playstore with the guardian of a Nigerian app, containing a comprehensive list of Nigerian apps and games of all categories, the app goes by the name [Nigerian apps and games](https://play.google.com/store/apps/details?id=com.vs.appmarket.nigeria&hl=en_US&gl=US).
 
 
-The project has four section namely :
+The project has three section namely :
 - App Analytics:
 This section is designed to analyse Nigerian apps of all available categories on Google playstore
 - Game Analytics:
 This section is designed to analyse Nigerian game apps of all available categories on Google playstore
-- App Comparison:
-This section is designed to give users the opportunity analyse a Nigerian app we don't have on our database
 - Sentiment Analytics:
 This section is designed to analyse customer reviews of Nigerian apps on both play store and apple store
 
@@ -64,9 +62,8 @@ There are certain things to be kept in mind when using this project:
 - [Wordcloud](https://pypi.org/project/wordcloud/)
 
 ## Contributors
-
-- [![Jude Leonard Ndu](https://img.shields.io/badge/Author-@JudeLeonard-gray.svg?colorA=gray&colorB=dodgergreen&logo=github)](https://www.github.com/judeleonard/)
-- [![Aisha Mohammed](https://img.shields.io/badge/Contributor-@Aisharm-gray.svg?colorA=pink&colorB=gray&logo=github)](https://github.com/aisha-rm)
-- [![Sharon Ibejih](https://img.shields.io/badge/Author-@sharonibejih-white.svg?colorA=goldenrod&colorB=gray&logo=github)](https://github.com/sharonibejih)
-- [![Azeez Razaq](https://img.shields.io/badge/Contributor-@Gbolahan-gray.svg?colorA=cyan&colorB=gray&logo=github)](https://github.com/Gbolahan-Aziz)
+[![Jude Leonard Ndu](https://img.shields.io/badge/Author-@JudeLeonard-gray.svg?colorA=gray&colorB=dodgergreen&logo=github)](https://www.github.com/judeleonard/) 
+     [![Sharon Ibejih](https://img.shields.io/badge/Author-@sharonibejih-white.svg?colorA=goldenrod&colorB=gray&logo=github)](https://github.com/sharonibejih)
+     [![Aisha Mohammed](https://img.shields.io/badge/Contributor-@Aisharm-gray.svg?colorA=pink&colorB=gray&logo=github)](https://github.com/aisha-rm)
+     [![Azeez Razaq](https://img.shields.io/badge/Contributor-@Gbolahan-gray.svg?colorA=cyan&colorB=gray&logo=github)](https://github.com/Gbolahan-Aziz)
 
