@@ -45,6 +45,7 @@ There are certain things to be kept in mind when using this project:
 - We had major constraint with data because there was little available Nigerian apps on some categories
 - When using any feature that involves using app id or app name. App must be explicitly Nigerian
 - When using app id , the app id needs to be without extra characters like so  _com.jumia.android_, the app id for [JUMIA](https://play.google.com/store/apps/details?id=com.jumia.android&hl=en&gl=US)
+- For easy access, we have also deployed the project on a cloud platform [HERE](https://ngappsanalytics.herokuapp.com/)
 
 
 ## Built With
