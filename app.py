@@ -441,7 +441,7 @@ elif Options == "Sentiment Analytics":
     st.markdown('### Want to analyze users feedback in realtime? Select your choice from the sidebar')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
 
-    st.sidebar.markdown("[Need help on knowing you app's ID name?]('https://medium.com/@aisharm13/how-to-get-app-id-b854ce5596b3')")
+    st.sidebar.markdown("[Need help in getting your app's ID or name?](https://medium.com/@aisharm13/how-to-get-app-id-b854ce5596b3)")
     
     try:
       if se =="GooglePlay Apps (Android)":
