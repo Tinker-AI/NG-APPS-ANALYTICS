@@ -440,6 +440,8 @@ elif Options == "Sentiment Analytics":
     st.image(img)
     st.markdown('### Want to analyze users feedback in realtime? Select your choice from the sidebar')
     se = st.sidebar.radio(label="Sentiment Analysis", options=(' ','GooglePlay Apps (Android)', 'AppStore Apps (iOS)'))
+
+    st.sidebar.markdown("[Need help on knowing you app's ID name?]('https://medium.com/@aisharm13/how-to-get-app-id-b854ce5596b3')")
     
     try:
       if se =="GooglePlay Apps (Android)":
@@ -540,6 +542,6 @@ st.write('')
 st.write('')
 st.write('')
 
-#st.sidebar.markdown('Checkout this document on how to')
 st.sidebar.markdown('[Give feedback](https://forms.gle/e1WFWwrRzieFp6an9)')
+
 st.sidebar.markdown('Made with :heart: by TinkerAI')
