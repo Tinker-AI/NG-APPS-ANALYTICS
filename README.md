@@ -1,8 +1,7 @@
 # Nigerian App Analytics
 
 ![GitHub contributors](https://img.shields.io/github/contributors/Tinker-AI/NG-APPS-ANALYTICS?logo=c)  ![GitHub last commit](https://img.shields.io/github/last-commit/Tinker-AI/NG-APPS-ANALYTICS?color=cyan&logo=git)  ![GitHub issues](https://img.shields.io/github/issues/Tinker-AI/NG-APPS-ANALYTICS?style=plastic)  ![GitHub pull requests](https://img.shields.io/github/issues-pr/Tinker-AI/NG-APPS-ANALYTICS?color=goldenrod&logo=github)
-     
-
+     ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/Tinker-AI/NG-APPS-ANALYTICS?color=cyan&logo=github)
 
 ## Project Description
 Nigerian App Analytics is a research project on the Nigerian app market.
