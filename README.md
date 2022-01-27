@@ -46,6 +46,15 @@ There are certain things to be kept in mind when using this project:
 - When using app id , the app id needs to be without extra characters like so  _com.jumia.android_, the app id for [JUMIA](https://play.google.com/store/apps/details?id=com.jumia.android&hl=en&gl=US)
 - For easy access, we have also deployed the project on a cloud platform [HERE](https://ngappsanalytics.herokuapp.com/)
 
+## Want to add your contributions to the project?
+- Scrape Nigerian apps data from App store 
+- Derive insights from the data and create visualization to represent your findings
+- Ensure the insights derived for the App store are well aligned with those for the Playstore. This 
+  will easily help us to draw an analogy to finding the best platform for product owners to market their products
+  between App store and Playstore.
+- To get started create a new directory📂 called Appstore in the root directory with a sub directory called data that will contain csv data.Then
+  make sure all your utility files for creating all the analyses are inside the Appstore root directorye. Incase you got other ideas you want to explore and add,
+  feel free to reach out.
 
 ## Built With
 - [Python](https://www.python.org/)
